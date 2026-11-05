@@ -2,15 +2,19 @@
 
 **Language: C# · Windows Forms · .NET Framework 4.8.** Complete application source, tests and PowerShell build/package scripts are included. The optional command-line capture reader is Python.
 
-Current version: **1.0.2**. See the dated [changelog](CHANGELOG.md) for changes between builds.
+Current version: **1.0.3**. See the dated [changelog](CHANGELOG.md) for changes between builds.
 
 A Windows desktop app for monitoring and configuring inverters that use the **CMSG / VPHB V-Series serial protocol**. Extract the portable ZIP to a writable folder and run `InverterView.exe`. No installer, Python runtime, account, or application password is needed.
+
+![Inverter View dashboard in dark mode, with load, battery voltage, AC-to-battery DC charging current, solar charging, machine status and voltage history](docs/images/dashboard-dark.jpg)
+
+*Dashboard in dark mode with example readings; no inverter is connected in this screenshot. Light mode is also available.*
 
 **Calibration is unresolved.** The original battery-voltage calibration command produced no observable effect on the tested inverter. The other five calibration writes have not been tested on hardware. They remain available as explicitly experimental commands so others can help investigate. Sending a packet is never reported as proof of acceptance.
 
 ## Download and run
 
-Download [InverterView-1.0.2-portable.zip](dist/InverterView-1.0.2-portable.zip), extract it, and run `InverterView.exe`. The ZIP contains the executable, its runtime configuration, and documentation. Requires Windows with .NET Framework 4.8 and the USB-to-serial adapter's driver. The application runs with ordinary user privileges. Its executable is unsigned.
+Download [InverterView-1.0.3-portable.zip](dist/InverterView-1.0.3-portable.zip), extract it, and run `InverterView.exe`. The ZIP contains the executable, its runtime configuration, and documentation. Requires Windows with .NET Framework 4.8 and the USB-to-serial adapter's driver. The application runs with ordinary user privileges. Its executable is unsigned.
 
 1. Stop the original monitoring program's serial connection.
 2. Select the inverter's COM port. The tested connection uses **2400 baud, 8N1**, no flow control, DTR/RTS off.
@@ -18,7 +22,7 @@ Download [InverterView-1.0.2-portable.zip](dist/InverterView-1.0.2-portable.zip)
 4. Review **Device settings**. Both groups show the current value alongside your proposed value. Amber marks pending edits; teal marks values that changed since connecting. Polling preserves your draft edits.
 5. Select **°C** or **°F** for temperatures. This preference is saved beside the executable; it does not change the inverter.
 
-All 20 normal settings are grouped in two columns, following the original utility's order. All six calibration controls have their own page. The **Dashboard** contains load, battery voltage, AC charging current, solar charging current, measurements, colored machine-status values and a battery-voltage chart. Machine status and the battery chart share the right-hand column equally. Hover over the chart for a voltage reading. The chart keeps the last 180 readings for the current connection.
+All 20 normal settings are grouped in two columns, following the original utility's order. All six calibration controls have their own page. The **Dashboard** contains load, battery voltage, AC-to-battery charging current, solar charging current, measurements, colored machine-status values and a battery-voltage chart. **AC → Battery** is the AC charger's battery-side output in **A DC**, not AC input amperage. Machine status and the battery chart share the right-hand column equally. Hover over the chart for a voltage reading. The chart keeps the last 180 readings for the current connection.
 
 Use the **Dark mode** switch beside the temperature switch, above GitHub in the lower sidebar. Light mode uses bold, darker text on a pale blue background. The theme and temperature unit are remembered. The indicator below **Restore settings** is green and checked while readings are fresh, and red and unchecked after disconnection or loss of fresh readings. The RS232 port list updates when opened or when connecting.
 

@@ -38,7 +38,7 @@ namespace InverterDesk
                     g.DrawRectangle(pen,3,8,24,16);g.DrawRectangle(pen,27,13,3,6);
                     for(int i=0;i<3;i++)g.FillRectangle(fill,6+i*7,11,4,10);
                 }
-                else if(kind=="AC charging current")
+                else if(kind=="AC → Battery")
                 {
                     g.DrawEllipse(pen,2,2,28,28);var wave=new PointF[25];
                     for(int i=0;i<wave.Length;i++)wave[i]=new PointF(6+i*20f/24,16-(float)Math.Sin(i*Math.PI*2/24)*6);
@@ -207,7 +207,7 @@ namespace InverterDesk
         {
             var page=new TableLayoutPanel{ColumnCount=1,RowCount=2,Margin=Padding.Empty};page.RowStyles.Add(new RowStyle(SizeType.Absolute,156));page.RowStyles.Add(new RowStyle(SizeType.Percent,100));
             var cards=new TableLayoutPanel{Dock=DockStyle.Fill,ColumnCount=4,RowCount=1,Margin=Padding.Empty};for(int i=0;i<4;i++)cards.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,25));
-            string[] keys={"Reported load","Battery voltage","AC charging current","Solar charging"},units={"Device-reported percentage","","Charging current","Charging current"};
+            string[] keys={"Reported load","Battery voltage","AC → Battery","Solar charging"},units={"Device-reported percentage","","Battery-side charging current","Charging current"};
             for(int i=0;i<4;i++)
             {
                 var card=new Panel{Dock=DockStyle.Fill,BackColor=Color.White,Margin=new Padding(0,0,10,12),Padding=new Padding(15,12,12,10)};
@@ -403,7 +403,7 @@ namespace InverterDesk
         {
             UpdateMachineStatus(s);
             details["MCU temperature"].Text="Not reported";details["Controller code"].Text="0x"+s.Data[26].ToString("X2");details["Charger code"].Text="0x"+s.Data[38].ToString("X2");
-            latest=s;if(sessionBaseline==null)sessionBaseline=s;metrics["Battery voltage"].Text=s.Battery.ToString("0.0")+" V";metrics["AC charging current"].Text=s.Data[23]+" A";metrics["Reported load"].Text=s.Load+" %";metrics["Solar charging"].Text=s.SolarCurrent.ToString("0.0")+" A";
+            latest=s;if(sessionBaseline==null)sessionBaseline=s;metrics["Battery voltage"].Text=s.Battery.ToString("0.0")+" V";metrics["AC → Battery"].Text=s.Data[23]+" A DC";metrics["Reported load"].Text=s.Load+" %";metrics["Solar charging"].Text=s.SolarCurrent.ToString("0.0")+" A";
             details["Operating mode"].Text=s.Mode;details["AC input"].Text=s.AcInput.ToString("0.0")+" V";details["Input frequency"].Text=s.InputHz.ToString("0.0")+" Hz";details["Output frequency"].Text=s.OutputHz.ToString("0.0")+" Hz";details["PV voltage"].Text=s.PvVoltage.ToString("0")+" V";details["AC output"].Text=s.Output.ToString("0.0")+" V";details["Battery capacity"].Text=s.Data[22]+" % (reported)";details["Inverter temperature"].Text=s.Data[25]==255?"Unavailable":s.Data[25]+" °C";details["Charger temperature"].Text=s.Data[37]==0||s.Data[37]==255?"Unavailable":s.Data[37]+" °C";details["Runtime"].Text=((int)(s.Runtime/24))+" d "+(s.Runtime%24).ToString("0.0")+" h";details["Machine / bank"].Text=s.Model+" / "+s.Units*12+" V";details["Inverter firmware"].Text=s.Firmware;details["Charger firmware"].Text=s.ChargerFirmware;details["Warnings / faults"].Text=s.Alarm?"Reported — inspect diagnostics":"None reported";details["Warnings / faults"].ForeColor=s.Alarm?Theme.Bad:Theme.Accent;
             foreach(var grid in new[]{settings,settingsRight,calibration})foreach(DataGridViewRow row in grid.Rows){Setting d=(Setting)row.Tag;row.Cells[1].Value=d.Text(s.Value(d),s.Units);row.Cells[4].Value=d.Range(s.Units);if(!populated.Contains(d.Address)){if(d.Choices==null||s.Value(d)>=d.Min&&s.Value(d)<=d.Max)row.Cells[2].Value=d.Editable(s.Value(d),s.Units);populated.Add(d.Address);}row.Cells[5].Value=outcomes.ContainsKey(d.Address)?outcomes[d.Address]:d.Calibration?(d.Address==50?"No effect observed":"Not yet tested"):(d.Address==6?"Previously verified":"Not yet hardware-verified");UpdateChange(row,s);}
             diagnostic.Text="Machine "+s.Model+" | Inverter "+s.Firmware+" | Charger "+s.ChargerFirmware+"\r\nStatus: "+Protocol.Hex(s.Data.Take(3).ToArray())+"    Warning: "+Protocol.Hex(s.Data.Skip(3).Take(3).ToArray())+"    Fault: "+Protocol.Hex(s.Data.Skip(6).Take(3).ToArray())+"\r\nController code: "+s.Data[26]+" (0x"+s.Data[26].ToString("X2")+")  |  Charger code: "+s.Data[38]+" (0x"+s.Data[38].ToString("X2")+")\r\nUnmapped extension: "+Protocol.Hex(s.Data.Skip(67).ToArray())+"\r\n"+(logPath==null?"Opening session log...":"Log: "+logPath);

@@ -72,7 +72,7 @@ Offset(s)  Meaning                                      Decoding
 18..19     Output frequency                            uint16 / 10 Hz
 20..21     Battery voltage                             uint16 / 10 V
 22         Reported battery capacity                   percent
-23         AC charging current                         A
+23         AC charger output to battery (DC current)   A DC
 24         Load                                        percent
 25         Inverter/heatsink temperature               C; 255 means N/A
 26         Controller code                             raw byte
@@ -105,6 +105,11 @@ Offset(s)  Meaning                                      Decoding
 66         Solar charging current fraction, if present tenths of an A
 67..79     Extension not decoded by Techfine 1.03       retained as hex
 80         Checksum in this captured frame variant
+
+The owner confirmed that payload[23] is the AC charger's battery-side DC
+output, not AC input amperage. The dashboard labels it AC -> Battery in
+A DC. Existing export keys acChargeCurrent and ac_charge_current_a are
+retained for compatibility and refer to this same DC measurement.
 
 Solar current = payload[36] + payload[66] / 10 when field 66 is present.
 Runtime hours = uint16(payload[28:30]) + payload[27] / 10.

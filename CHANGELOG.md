@@ -1,5 +1,11 @@
 # Changes
 
+## 1.0.3 — 2026-11-05
+
+- Renamed the AC charging dashboard card to AC → Battery and displayed its value in A DC, with the caption Battery-side charging current.
+- Clarified the settings help and protocol notes: this reading is the AC charger's DC output into the battery, not AC input amperage. Measurement decoding and device commands are unchanged.
+- Added a dashboard screenshot with clearly labeled example readings to the README.
+
 ## 1.0.2 — 2026-11-04
 
 - Moved the connection indicator below Restore settings in the sidebar and removed the empty dashboard header row.
