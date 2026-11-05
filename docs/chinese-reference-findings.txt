@@ -1,0 +1,135 @@
+CHINESE-SOURCE CALIBRATION RESEARCH
+2026-11-04 local time; live captures dated 2026-11-05 UTC
+
+RESULT
+
+Found actual Chinese-commented PC source with battery-voltage calibration
+commands and a separate save-calibration action. This is a concrete new lead,
+not a verified fix or a manufacturer-confirmed service utility for this unit.
+The associated read queries and zero-amount BTA probes produced no reply on
+machine 8048 firmware 2.10. No nonzero BTA or PSAVE command was sent.
+
+1. PUBLIC TQF-AllInOne SOURCE
+
+Repository:
+https://github.com/zhuaibai/TQF-AllInOne
+Inspected revision: 82409ae4950c906634998e429dfb2372a2900603
+
+Calibration command source:
+https://github.com/zhuaibai/TQF-AllInOne/blob/82409ae4950c906634998e429dfb2372a2900603/WpfApp1/Command/Comand_GB3024/Special_Command.cs
+
+Line 1998: SendSettingCommand("BTA+", "1") -- battery voltage increase.
+Line 2086: SendSettingCommand("BTA-", "1") -- battery voltage decrease.
+Line 1294: SendSettingCommand("PSAVE", "") -- separate save-calibration action.
+The battery regions are named 电池电压+ and 电池电压-.
+AC-voltage controls also call IVA+ / IVA- with "01". Their method names and
+comments are inconsistent enough that their direction should not be inferred
+without verification. No IVA command was sent.
+
+The settings path pauses background polling and waits two seconds before
+sending. This motivated the five-second quiet-interval tests of the known
+CSCA battery command. It does not prove such a pause is required by firmware.
+
+Serial framing source:
+https://github.com/zhuaibai/TQF-AllInOne/blob/82409ae4950c906634998e429dfb2372a2900603/WpfApp1/Services/SerialCommunicationService.cs
+
+SendCommand sends the supplied ASCII query bytes; the callers include CR.
+SendSettingCommand concatenates command and value, computes CRC16/CCITT with
+initial value zero, emits the high CRC byte first, increments CRC bytes equal
+to 0A/0D/28, and appends CR. Thus BTA+1 is CRC-framed in this application.
+
+Protocol selection source:
+https://github.com/zhuaibai/TQF-AllInOne/blob/82409ae4950c906634998e429dfb2372a2900603/WpfApp1/ViewModels/MainWindowVM.cs
+
+Queries QPRTL<CR>; recognizes HPVINV/LPVINV-family identifiers and other device
+types. We did not find VPHB, CSCA or CSICAL in this repository. Those are the
+working status family and attempted calibration family of the user's unit.
+The repository is public author code, not established as an official release
+or evidence of identical boards/firmware. No downloaded installer was run.
+
+2. PRIMARY REFERENCE FOR A ZERO-AMOUNT BTA PROBE
+
+MPP Solar PCM3012 MPPT calibration SOP, DIFFERENT HARDWARE:
+https://www.mppsolar.com/v3/catalogs/pcm3012type05/MPPT%20Calibration%20SOP.pdf
+
+Documents BTA+XX/BTA-XX with integer amounts 0 through 20, and shows CRC use
+and an ACK in its example. This supplied the zero-amount BTA+00 probe syntax.
+Its 12 V test setup and calibration scaling must not be assumed applicable
+to the user's nominal 48 V inverter.
+
+An independent implementation also documents BTA in its PI30 command set:
+https://github.com/jblance/mpp-solar/blob/eafdd4328c77f516cf82430c5bcb6fa042c45d3a/mppsolar/protocols/pi30.py
+
+This confirms use on that protocol family, not compatibility with VPHB/2.10.
+Other inverter protocols use different BTA formats, including absolute/two-
+point calibration. No such command, calibration reset, or save was attempted.
+
+3. LIVE RESULTS DERIVED FROM THESE LEADS
+
+parser-tqf-read-20261105T014934Z.*
+QPRTL, HIMSG1, HBAT, HEEP1, HEEP2, HOP and HGRID, each tested plain CR and
+CRC-plus-CR. Fourteen probes: no reply to any, while normal VPHB health checks
+continued to succeed and configuration remained unchanged.
+
+parser-bta-zero-20261105T015118Z.*
+Two calibration WRITE probes with requested amount zero:
+  BTA+00 plus CRC and CR: 42 54 41 2B 30 30 20 BD 0D
+  BTA+00 plus CR:         42 54 41 2B 30 30 0D
+Neither elicited a reply or observable voltage/configuration change.
+This does not test the exact one-digit, nonzero BTA+1 call in TQF-AllInOne,
+and silence alone cannot prove that every BTA format is unsupported.
+There is no confirmed accepted BTA write to reverse or commit; PSAVE was
+not sent. No firmware lock/unlock conclusion follows from these results.
+
+calibration-quiet-effect-20261105T015320Z.*
+calibration-quiet-effect-20261105T015849Z.*
+Original vendor CSCA/CSICAL command with five-second quiet intervals before
+and after raw 130 (+0.5% in PC software), followed by raw 125. No change in
+either battery voltage (52.1 V) or calibration field (125). The latter test
+reported 0% load throughout. No extra ACK/NAK/error bytes were received.
+
+The output-off experiment obtained no baseline status reply and therefore
+sent no calibration write. Output and communication were restored afterward.
+See calibration-investigation.txt for the complete experiment record.
+
+4. OTHER CHINESE REFERENCES CHECKED
+
+Official Techfine Chinese service and product pages:
+https://techfine.net/service.html
+https://techfine.net/productinfo-2107-5056.html
+https://techfine.net/productinfo-2107-5132.html
+These did not supply a matching 8048/2.10 calibration service sequence.
+
+IOTRIX publicly lists support for Techfine inverter monitoring:
+https://portal.iotrix.net/devices/
+https://portal.iotrix.net/guide/
+https://portal.iotrix.net/download/
+Its inspected public material supplied no matching calibration commands.
+
+Firsthand Chinese inverter discussion, replies restricted by login:
+https://www.mydigit.cn/thread-447755-1-1.html
+No authenticated replies were accessed or inferred.
+
+Chinese ESPHome implementation for a different, high-frequency model:
+https://github.com/Depressboy/esphome-pipsolar-techfine
+Its GD11048MH/PI30 context does not establish support on VS8048AMN/2.10.
+
+Same public repository author's factory-test code:
+https://github.com/zhuaibai/WpfApp2/tree/e64a26a52a49a195f040f74a8b87a2ef6d4b1618
+This is a BMS-ATE battery-management tester with Techfine Chinese branding,
+not the user's inverter firmware. Its test-mode, MOS/relay and calibration
+commands were not sent to this inverter.
+
+Searches included 泰琪丰 with 校准, 校正, 标定, 电池电压, 工厂模式,
+上位机, 串口, 通讯协议, 软件下载 and 生产测试, plus VPower, CSICAL,
+CSIPAM and INV-HB. Public searches cannot establish that a private factory
+procedure or a different firmware build does not exist.
+
+NEXT MISSING EVIDENCE
+
+A successful capture, service procedure, matching firmware image for offline
+inspection, or alternate utility that explicitly supports machine 8048,
+inverter firmware 2.10 and its VPHB/CSCA interface. Shared branding or board
+appearance alone does not establish command equivalence. Until an actual
+adjustment is observed, persistence and the other five calibration controls
+remain unverified. No vendor message was sent and no firmware was flashed.

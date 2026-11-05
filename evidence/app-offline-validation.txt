@@ -1,0 +1,32 @@
+PASS Captured sample and checksum
+PASS Golden vendor heartbeat and write packets
+PASS All six calibration address/checksum mappings
+PASS Reset packet encoding
+PASS 48 V bank conversion and input limits
+PASS Enum meanings preserve vendor order
+PASS Every byte boundary and coalesced status frames
+PASS Noise, invalid lengths and corrupt checksum resynchronize
+PASS Changing live solar-current fraction is not configuration drift
+PASS Normal apply requires three matching fresh readbacks
+PASS Temporary accepted calibration change restores original
+PASS Ignored calibration write never reports acceptance
+PASS Lost post-write reply still restores
+PASS Partial write exception still restores
+PASS Restore failure is explicit, never successful
+PASS Changed reviewed configuration aborts before sending
+PASS Unknown firmware requires explicit experimental opt-in
+PASS Warnings and unrestorable original values block writes
+PASS No-op and excessive temporary changes send nothing
+PASS Unrelated settings mutation is not successful verification
+PASS Inconsistent readbacks are not verified
+PASS Settings files and legacy exports round trip all values
+PASS Settings restore writes only selected changes
+PASS Settings restore stops after a failed step and reports partial result
+PASS Settings restore preflights identity and all selected ranges
+PASS Settings restore rejects drift and skips matching values
+PASS Settings restore disconnect request stops before next setting
+PASS Original captured status stream
+28 passed; 0 failed. No serial port was opened.
+PASS UI: all 26 controls, current/draft separation, change tracking, read-only cells, disconnected guards, application name.
+PASS decimal-point and decimal-comma input. No serial port opened.
+Built <local-user>\Documents\Codex\2026-11-04\i-h\vevor-inverter-desk\build\InverterView\InverterView.exe

@@ -1,0 +1,28 @@
+{
+  "responses": [
+    {
+      "query": "Q1",
+      "rx_hex": "28 30 30 30 2e 30 20 30 30 30 2e 30 20 31 31 39 2e 36 20 30 30 33 20 36 30 2e 30 20 32 2e 31 37 20 33 30 2e 30 20 31 30 30 30 30 30 30 30 0d",
+      "rx_ascii": "b'(000.0 000.0 119.6 003 60.0 2.17 30.0 10000000\\r'"
+    },
+    {
+      "query": "QMD",
+      "rx_hex": "49 4e 56 2b 31 32 30 4d 2c 38 30 30 2c 31 2f 31 2c 32 32 30 2c 32 32 30 2c 34 2c 31 32 2e 30 2c 31 31 2e 35 2c 31 33 2e 38 0d",
+      "rx_ascii": "b'INV+120M,800,1/1,220,220,4,12.0,11.5,13.8\\r'"
+    },
+    {
+      "query": "QPRTL",
+      "rx_hex": "",
+      "rx_ascii": "b''"
+    },
+    {
+      "query": "HIMSG1",
+      "rx_hex": "",
+      "rx_ascii": "b''"
+    }
+  ],
+  "error": null,
+  "port_closed": true,
+  "total_rx_bytes": 519,
+  "setting_writes_sent": 0
+}

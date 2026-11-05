@@ -1,0 +1,8 @@
+ASSEMBLY_SHA256: 92c694b3850859d3f6f780911557a4a6b9ac179b2e26c53de06a425a188f5121
+bulk_14_6: 43 53 50 41 0A 43 53 49 50 41 4D 06 00 92 98
+MATCH: True
+battery_cal_plus_0_1: 43 53 43 41 0A 43 53 49 43 41 4C 32 00 7E B0
+MATCH: True
+battery_cal_restore_0_0: 43 53 43 41 0A 43 53 49 43 41 4C 32 00 7D AF
+MATCH: True
+PASS: 78 packets across all 26 controls match the original vendor builder. No COM port created or opened.

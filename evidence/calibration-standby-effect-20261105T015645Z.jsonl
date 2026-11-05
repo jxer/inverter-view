@@ -1,0 +1,10 @@
+{"at_utc": "2026-11-05T01:56:45.087052+00:00", "elapsed_seconds": 0.047, "event": "port_opened", "port": "COM4", "baud": 2400}
+{"at_utc": "2026-11-05T01:56:45.089053+00:00", "elapsed_seconds": 0.047, "event": "capture_begin", "phase": "startup", "requested_seconds": 1}
+{"at_utc": "2026-11-05T01:56:46.083103+00:00", "elapsed_seconds": 1.047, "event": "capture_end", "phase": "startup", "bytes_received": 0}
+{"at_utc": "2026-11-05T01:56:46.086504+00:00", "elapsed_seconds": 1.047, "event": "tx_intent", "purpose": "baseline_1", "hex": "43 4d 53 47 06 49 4e 56 2d 48 42"}
+{"at_utc": "2026-11-05T01:56:46.087508+00:00", "elapsed_seconds": 1.047, "event": "tx_completed", "purpose": "baseline_1", "bytes_written": 11, "hex": "43 4d 53 47 06 49 4e 56 2d 48 42"}
+{"at_utc": "2026-11-05T01:56:46.088508+00:00", "elapsed_seconds": 1.047, "event": "capture_begin", "phase": "baseline_1", "requested_seconds": 1.5}
+{"at_utc": "2026-11-05T01:56:47.580074+00:00", "elapsed_seconds": 2.547, "event": "capture_end", "phase": "baseline_1", "bytes_received": 0}
+{"at_utc": "2026-11-05T01:56:47.581075+00:00", "elapsed_seconds": 2.547, "event": "error", "error": "RuntimeError: Expected one fresh status response, got 0: baseline_1"}
+{"at_utc": "2026-11-05T01:56:47.662616+00:00", "elapsed_seconds": 2.625, "event": "port_closed", "is_open": false}
+{"at_utc": "2026-11-05T01:56:47.663621+00:00", "elapsed_seconds": 2.625, "event": "summary", "result": null, "error": "RuntimeError: Expected one fresh status response, got 0: baseline_1", "port_closed": true, "capture": {"total_rx_bytes": 0, "valid_status_frames": 0, "bytes_in_valid_status_frames": 0, "unclassified_rx_bytes": 0, "unclassified_segments": [], "invalid_status_candidates": [], "calibration_readbacks": [], "warning_or_fault_frames": 0}}

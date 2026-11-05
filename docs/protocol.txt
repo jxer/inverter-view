@@ -1,0 +1,314 @@
+Confirmed Techfine / VEVOR status protocol
+=========================================
+
+EVIDENCE
+
+Capture: <local-user>\Desktop\log.dmslog8
+Size: 2,128,995 bytes
+SHA-256: cbf13e71c6a3365cd9e10643a42bfb5d2d92439c4df6d95c6d11a9c4182acf8d
+
+90 complete VPHB replies were recovered. Every reply is 86 bytes and passes its
+checksum. Six distinct byte sequences occur, with only output voltage, inverter
+temperature and checksum changing. Output varies from 119.4 to 119.7 V and
+inverter temperature from 23 to 24 C.
+
+The same file contains 182 copies of the fixed status request. HHD can include
+request submission and completion records; this count is not a physical request
+count. The extractor does not parse the container's record timestamps.
+
+Field meanings and scaling were recovered from the installed vendor program:
+C:\Program Files\VPower\Techfine Runtime 001 - V1.03.exe
+
+Local decompiled source used:
+<local-user>\Documents\Codex\2026-11-04\i-h\work\vpower-inspect\decompiled\V_Series_Runtime\V_Series_Runtime_Form.cs
+
+Relevant methods: Command_Send_Operation, serialPort1_DataReceived,
+Check_Sum_Operation, Display_Refresh and START_BT_Click. The live vendor UI was
+also inspected: COM4, 2400 baud, machine 8048, firmware 2.10, battery 52.2 V,
+output 119.6 V / 60.0 Hz, load 3%, DC Mode. This corroborates the decoded values.
+
+SERIAL CONNECTION
+
+COM4 on this computer; 2400 baud, 8 data bits, no parity, one stop bit (8N1).
+No hardware/software flow control. The new reader selects COM4 explicitly and
+does not enumerate ports and choose the first one like Techfine's Start handler.
+
+HOST STATUS REQUEST
+
+Hex:    43 4D 53 47 06 49 4E 56 2D 48 42
+Python: b"CMSG\x06INV-HB"
+
+Four-byte ASCII header CMSG, one-byte command length 06, six ASCII bytes INV-HB.
+Exactly 11 bytes total. There is no appended CR, LF, null terminator or checksum
+on this particular request. No parameter-setting requests are implemented.
+
+INVERTER STATUS REPLY
+
+Frame byte(s)   Meaning
+0..3            ASCII VPHB (56 50 48 42)
+4               Payload length INCLUDING the final checksum byte
+5..end-1        Payload data
+end             Checksum: sum of payload data bytes modulo 256
+
+Here byte 4 is 0x51 (81), so total length is 5 + 81 = 86 bytes.
+For a Python frame: (sum(frame[5:-1]) & 0xFF) == frame[-1].
+Header and length are excluded from the checksum.
+Use a byte buffer; serial reads may split or combine protocol frames.
+
+PAYLOAD FIELDS
+
+Offsets below are zero-based from frame byte 5. Multi-byte numbers are unsigned
+little-endian. The final checksum is not a data field.
+
+Offset(s)  Meaning                                      Decoding
+0..2       Status flags                                three bytes
+3..5       Warning flags                               three bytes
+6..8       Fault flags                                 three bytes
+9,10       Inverter firmware major, minor              2 and 10 -> 2.10
+11         Machine type                                80 in capture
+12..13     AC input voltage                            uint16 / 10 V
+14..15     AC input frequency                          uint16 / 10 Hz
+16..17     Reported output voltage                     uint16 / 10 V
+18..19     Output frequency                            uint16 / 10 Hz
+20..21     Battery voltage                             uint16 / 10 V
+22         Reported battery capacity                   percent
+23         AC charging current                         A
+24         Load                                        percent
+25         Inverter/heatsink temperature               C; 255 means N/A
+26         Controller code                             raw byte
+27         Runtime fraction                            tenths of an hour
+28..29     Runtime integer                             whole hours
+30         State-machine step                          5 AC Mode, 6 DC Mode
+31         Battery units                               number of 12 V units
+32,33      Charger firmware major, minor               1 and 1 -> 1.01
+34..35     PV voltage                                  uint16 V
+36         Solar charging current integer              A
+37         Charger temperature                         C; 0 or 255 means N/A
+38         Charger code                                raw byte
+39..44     Calibration/protection values               retained in raw frame
+45         Input voltage range code                    retained in raw frame
+46         Input frequency range code                  retained in raw frame
+47         Work-mode setting                           1 utility, 2 solar, 3 DC first
+48         Charge-mode setting                         1 utility, 2 solar, 3 solar only
+49         AC charge-current limit                     percent
+50         Solar charge-current limit                  percent
+51         Bulk charge voltage                         byte / 10 V per 12 V unit
+52         Float charge voltage                        byte / 10 V per 12 V unit
+53         Low-voltage lock                            byte / 10 V per 12 V unit
+54         DC-to-AC threshold                          byte / 10 V per 12 V unit
+55         AC-to-DC threshold                          byte / 10 V per 12 V unit
+56         Configured output voltage                   V
+57         AC input check speed                        retained in raw frame
+58         Configured output frequency code            1 = 50 Hz; 2 = 60 Hz
+59..64     Restart/backlight/beep/limit options          retained in raw frame
+65         UART setting                                raw byte; 0 in capture
+66         Solar charging current fraction, if present tenths of an A
+67..79     Extension not decoded by Techfine 1.03       retained as hex
+80         Checksum in this captured frame variant
+
+Solar current = payload[36] + payload[66] / 10 when field 66 is present.
+Runtime hours = uint16(payload[28:30]) + payload[27] / 10.
+Techfine's machine display concatenates field 11 with field 31 * 12: 80 + 48
+becomes the displayed string 8048. This field does not independently prove a
+manufacturer or a rated real-power output.
+
+Observed status: 08 00 00. The first status byte's bit 3 means charger connected;
+bits 0, 1 and 2 mean battery full, controller/AC charging and solar charging.
+Warning and fault bytes are all zero in this capture. State step 6 is DC Mode.
+The third status byte has controller-warning/fault and charger-warning/fault
+flags in its low four bits; all are clear here.
+
+KNOWN INTERPRETATION LIMITS
+
+- The measured output field is around 119.6 V while the configured voltage field
+  is 240 V. Both are displayed this way by Techfine. The exact output channel
+  represented by the measured field is not established here.
+- Battery capacity reports 100%, but the separate battery-full flag is clear.
+  Preserve both as reported; do not treat the percentage as verified BMS SOC.
+- The controller code is raw decimal 20 (hex 0x14). Techfine prepends "0x" to
+  decimal text and displays "0x20". The reader reports the actual raw value and
+  correctly formatted hex separately.
+- The 13-byte extension is 01 73 82 04 03 01 0A 14 5F 32 6C 00 00 in this capture.
+  It is included in checksum validation but its meanings remain unverified.
+- Load is reported as a percentage, not watts. No output-power or battery
+  discharge-current value is inferred from these decoded fields.
+- Validation covers captured responses, ten successful direct status queries,
+  and the single bulk-setting change documented below. A battery calibration
+  test did not produce the requested readback change; details are below. Other
+  setting/calibration writes and the unmapped extension remain untested.
+
+VALIDATION RESULTS
+
+Six offline checks passed, covering real capture values, arbitrary read
+fragmentation/coalescing, checksum/length error recovery, truncated frames,
+request rejection, and a simulated status-only serial session. See
+<local-user>\Documents\Codex\2026-11-04\i-h\work\verify-inverter-reader.py
+
+Direct hardware test, November 4, 2026 (America/New_York): the user stopped
+Techfine, then the new reader sent ten INV-HB requests on COM4 at 2400/8N1.
+All ten replies were 86 bytes with independently valid checksums. The first
+reply arrived at 19:32:56 EST and the last at 19:33:05 EST. Reported battery
+voltage was 52.2 V, output was 119.5-119.7 V at 60.0 Hz, load was 3%, inverter
+temperature was 24 C, state was DC Mode, and warning/fault bytes were zero.
+Decoded settings matched the original capture. See live-test-summary.json and
+live-test-2026-11-04.jsonl for the results and full replies.
+
+The hardware test sent only the fixed status request. No inverter settings were
+changed. The process exited with code 0 and closed the serial port. Techfine was
+left off. The original capture and installed vendor application were not modified.
+
+USER-REQUESTED BULK-SETTING TEST
+
+Subsequently, the user requested bulk 14.1 -> 14.6 and clarified this is a 48 V
+system. A fresh status reply confirmed machine 8048, four 12 V units, and bulk
+14.1. One setting packet was sent:
+
+43 53 50 41 0A 43 53 49 50 41 4D 06 00 92 98
+
+This is CSPA + length 10 + CSIPAM + parameter address 6 + high byte 0 + encoded
+value 146 + checksum 0x98. The checksum covers the three parameter bytes only:
+(6 + 0 + 146) modulo 256 = 152. The vendor's allowed bulk range is 135..150,
+representing 13.5..15.0 V per 12 V unit.
+
+Three consecutive 86-byte status replies passed checksum validation and reported
+payload[51] = 146 (14.6), with payload[31] = 4. The full-bank bulk charge target
+is therefore 58.4 V. Among payload offsets 39..65, only offset 51 changed; all
+other known calibration and setting bytes stayed unchanged. COM4 was closed
+after verification. The test mistakenly left the setting at 14.6; the user later
+restored 14.1 and clarified that the change was intended to be temporary.
+Later captures verify 14.1. Persistence across a power cycle was not tested.
+
+Audit: bulk-change-14.6-2026-11-04.jsonl
+One-time script: <local-user>\Documents\Codex\2026-11-04\i-h\work\set_bulk_14_6.py
+The reusable inverter_reader.py still has no setting-write capability.
+
+CALIBRATION TEST: WRITE NOT VERIFIED
+
+The user selected a temporary adjustment, verification and restoration test.
+The selected field was battery-voltage calibration: vendor address 50 (0x32),
+read back at payload offset 41. Techfine displays (raw - 125) / 10 percent and
+allows raw values 100..150. The baseline was raw 125, displayed as 0.0%.
+
+Temporary +0.1% command, matching Techfine's SINGLE_CAL_REQUEST constants:
+43 53 43 41 0A 43 53 49 43 41 4C 32 00 7E B0
+
+Original 0.0% restoration command:
+43 53 43 41 0A 43 53 49 43 41 4C 32 00 7D AF
+
+Layout: CSCA + length 10 + CSICAL + address/high/low/checksum. Checksum covers
+address/high/low only. Byte 0x7E = 126, byte 0x7D = 125.
+
+First attempt: the temporary value was not observed on readback. Original value
+was sent back and three valid status frames reported baseline calibration.
+Diagnostic retry: no immediate response was received during either 0.8-second
+reply window. Four status replies after the temporary command still reported
+125, including one about 6.6 seconds after the write. Original value was sent
+back, and three replies again matched the baseline's known settings/calibration.
+All six calibration bytes remained 125 throughout both attempts. Battery
+voltage remained 52.2 V; bulk remained 14.6; warning/fault bytes remained zero.
+
+Conclusion: the requested calibration adjustment was NOT demonstrated. The
+reported final calibration matches the original, but this does not prove the
+restoration command was accepted, since the temporary value was never observed.
+The host wrote complete 15-byte packets and subsequent status communication
+worked. Firmware acceptance, restrictions, actual internal calibration state,
+and the reason for unchanged readback remain unverified. Do not label calibration
+write support as working or infer a need for larger/unrelated writes.
+
+Audit files:
+calibration-test-2026-11-04.jsonl
+calibration-test-diagnostic-2026-11-04.jsonl
+Test script: <local-user>\Documents\Codex\2026-11-04\i-h\work\test_battery_calibration.py
+The port was closed after both attempts.
+
+ORIGINAL-EXECUTABLE PACKET AUDIT
+
+An offline C# harness loaded the unmodified original Techfine executable and
+called its actual Command_Send_Operation method. The form constructor was
+bypassed, only the required command-buffer fields were initialized, and
+serialPort1 remained null. The original method built its packet buffer and then
+caught the expected null-port exception. No SerialPort was created or opened.
+
+The original executable produced byte-for-byte matches for all three packets:
+- Bulk 14.6: 43 53 50 41 0A 43 53 49 50 41 4D 06 00 92 98
+- Battery calibration +0.1%: 43 53 43 41 0A 43 53 49 43 41 4C 32 00 7E B0
+- Battery calibration 0.0%: 43 53 43 41 0A 43 53 49 43 41 4C 32 00 7D AF
+
+Installed and audited executable SHA-256:
+92c694b3850859d3f6f780911557a4a6b9ac179b2e26c53de06a425a188f5121
+
+Evidence: vendor-packet-audit.txt
+Harness: <local-user>\Documents\Codex\2026-11-04\i-h\work\VendorPacketAudit.cs
+
+The CAL_PASSWORD_COMFIRM_BT_Click -> Calibration_Setting_Enable path only
+unlocks the PC controls and resets their entry fields. It sends no inverter
+authentication/unlock transaction. Calibration_Reset resets local entry fields;
+FACTORY_CAL_RESET is a separate device operation and was not used.
+
+This audit eliminates a packet-construction mismatch for the tested values.
+It does not prove firmware acceptance, on-wire timing/session equivalence, or
+that the readback fields reflect actual internal calibration. The application
+supports multiple inverter families; visible controls need not establish that
+every firmware variant implements every command. The device firmware itself
+has not been obtained or inspected, and a calibration lock is not confirmed.
+
+The user subsequently reported that calibration also failed in the original
+Techfine application. That supports a shared software/firmware incompatibility
+or restriction as a possibility; it does not identify the specific cause.
+
+CONTINUOUS RAW CAPTURE: 2026-11-04 EVENING (2026-11-05 01:02 UTC)
+
+The earlier diagnostic retained only the first 0.8 seconds of raw bytes after
+each calibration write. Its later status queries cleared pending input and
+discarded undecoded bytes. That could have hidden an unfamiliar/delayed reply.
+
+A new bounded test retained every byte returned by the serial driver, before
+decoding. It never cleared input between requests. Capture included startup,
+two baseline requests, one +0.1% battery-voltage calibration command, four
+seconds of quiet reception, four status requests, the exact baseline command,
+four seconds of quiet reception, three final requests, and two seconds of idle
+reception. TX/RX entries have UTC and elapsed host timestamps. Chunk boundaries
+are read boundaries, not protocol packet boundaries or electrical timestamps.
+
+Result: 25.766 seconds; 774 RX bytes; nine complete 86-byte checksum-valid VPHB
+status replies. Every received byte belonged to those nine frames. There were
+no extra/unclassified bytes, invalid status candidates, or reported warning/
+fault flags. No bytes arrived during either four-second post-write quiet
+window. All calibration readbacks were raw 125 (0.0%); target 126 (+0.1%) was
+never observed. Three final replies matched all baseline known setting and
+calibration bytes. COM4 was closed. This provides no explicit error response
+or explanation for the unchanged calibration and does not establish a lock.
+
+The fresh baseline ALREADY reported bulk 14.1 per 12 V unit, or 56.4 V for this
+four-unit nominal 48 V bank. It remained 14.1 throughout this test. No bulk
+command was sent. The earlier 14.6 setting was independently confirmed at the
+time of that earlier test. The user subsequently confirmed that they restored
+14.1 themselves because the earlier change was intended as a temporary test.
+Do not infer nonvolatile persistence from immediate setting readbacks alone.
+
+Audit: raw-calibration-20261105T010234Z.jsonl
+Summary: raw-calibration-20261105T010234Z.summary.json
+Raw RX: raw-calibration-20261105T010234Z.rx.bin
+Readable trace: raw-calibration-20261105T010234Z.txt
+One-time script: <local-user>\Documents\Codex\2026-11-04\i-h\work\raw_calibration_diagnostic.py
+
+Useful next evidence is the manufacturer's calibration procedure/protocol for
+this model and firmware 2.10, or a timestamped capture of a vendor-confirmed
+working calibration session. No larger adjustments, reboot, factory reset or
+unrelated commands are justified by the absence of an error response.
+
+FOLLOW-UP: POWMR RESEARCH AND BOUNDED PROBES
+
+See calibration-investigation.txt for the current investigation. A public
+PowMr capture confirms the same software/protocol family but contains no
+calibration writes. A separately downloaded V-Series installer contains the
+exact same executable as the user's copy. Ten documented alternate read
+queries were tried; only legacy Q1 and QMD returned data.
+
+Three explicitly experimental framing/checksum variants were tested on the
+same battery-calibration address, using temporary raw 126 and then original
+raw 125 in each tested format. None produced a changed calibration readback.
+The final capture contains 21 valid status frames and no other RX bytes.
+All settings and extension bytes match baseline; bulk remains 14.1 per unit,
+all six calibration bytes remain 125, no warnings/faults, port closed.
+These variants are not established protocol or supported write features.

@@ -1,0 +1,273 @@
+VEVOR / TECHFINE CALIBRATION INVESTIGATION
+2026-11-04 local time; captures dated 2026-11-05 UTC
+
+RESULT
+
+Calibration is NOT fixed or demonstrated as writable. The reported battery
+calibration has never changed from raw 125 (0.0%) in our tests. Consequently,
+we cannot yet test whether an accepted adjustment survives a power cycle.
+The larger +0.5% tests also produced no change in reported battery voltage.
+No explicit calibration error, acknowledgement, or rejection was received.
+A firmware lock is possible but has not been established.
+
+DEVICE AND CURRENT STATE
+
+User's model: VEVOR VS8048AMN, nominal 48 V.
+Live identity: machine 8048; inverter firmware 2.10; charger firmware 1.01;
+four nominal 12 V units. COM4 Prolific USB-to-serial, 2400 baud, 8N1, no flow
+control, DTR/RTS false.
+
+Final test, 2026-11-05 01:58:49 UTC capture: all six calibration bytes 125;
+bulk 14.1 per 12 V unit = 56.4 V
+full-bank target; battery measurement 52.1 V; DC Mode; no AC/PV charging;
+no reported warnings/faults. All setting bytes and the unmapped extension
+matched the fresh baseline. Output was restored by the user after the brief
+output-off experiment. Final reported output was 119.5 V, 60.0 Hz, load 0%.
+COM4 was closed. Calibration write acceptance remains unverified.
+
+Correction to earlier audit: the bulk 14.1 -> 14.6 change was intended as a
+temporary test. We mistakenly left 14.6 in place. The user restored 14.1.
+Later reads confirm 14.1. This was NOT an unexplained firmware reversion.
+
+CONFIRMED PC-SOFTWARE COMMANDS
+
+The original Techfine Runtime 001 - V1.03.exe builds these exact packets:
+
+Status:
+43 4D 53 47 06 49 4E 56 2D 48 42
+
+Battery calibration raw 126, displayed +0.1%:
+43 53 43 41 0A 43 53 49 43 41 4C 32 00 7E B0
+
+Battery calibration raw 125, displayed 0.0%:
+43 53 43 41 0A 43 53 49 43 41 4C 32 00 7D AF
+
+The calibration layout is CSCA, length 10, CSICAL, address, value high,
+value low, additive checksum over address/high/low. The original executable
+was invoked offline with no SerialPort to verify these bytes, not merely
+reimplemented from decompiler output. The user's original application also
+failed to change calibration.
+
+The password handler enables local PC controls. It sends no inverter unlock
+transaction. The confirm handler queues one calibration write. We found no
+separate save/commit transaction in that path. These are facts about the PC
+application, not evidence of firmware requirements. We do not have inverter
+firmware source or a firmware image.
+
+The PC utility defines all six controls below. These addresses/scales are NOT
+verified as writable on firmware 2.10 or as registers in another protocol.
+One bounded CSPA test of battery address 50, motivated by the PC application's
+shared 56-entry parameter table, produced no observable change; see item 5.
+
+Control                 Vendor address  VPHB payload offset  PC display range
+AC output voltage       48 / 0x30       39                   -2.5%..+2.5%
+AC input voltage        49 / 0x31       40                   -2.5%..+2.5%
+Battery voltage         50 / 0x32       41                   -2.5%..+2.5%
+Charge current          51 / 0x33       42                   -15%..+15%
+Load                    52 / 0x34       43                   -10%..+10%
+Protection level        53 / 0x35       44                   -5%..+5%
+
+All have PC default raw 125. Voltage displays use (raw-125)/10 percent;
+the other three use raw-125 percent. Only battery calibration was tested.
+
+LIVE INVESTIGATION
+
+1. Vendor-format continuous capture
+   raw-calibration-20261105T010234Z.jsonl / .summary.json / .rx.bin / .txt
+   25.766 seconds, 774 bytes, 9 valid 86-byte VPHB frames. Four seconds of
+   quiet RX after both the temporary write and original-value write. No
+   other bytes, errors, warnings, or changed calibration readbacks.
+
+2. Alternate read-only interfaces
+   protocol-probes-20261105T011231Z.jsonl / .summary.json / .rx.bin
+   Q1<CR> and QMD<CR> return legacy UPS-style status/identity text.
+   QPRTL<CR> and HIMSG1<CR> return no bytes in the 2-second windows.
+   Configuration matched before/after each query; zero setting writes.
+
+   protocol-probes-20261105T012137Z.jsonl / .summary.json / .rx.bin
+   QPI, QVB, QVOP, QVC, QBV, and QVFW, each terminated by CR, all returned
+   no bytes in their 2-second windows. Each was followed by a valid normal
+   VPHB status check with unchanged settings; zero setting writes.
+   These are documented read queries on other UPS models. Their failure
+   does not prove every possible ASCII command is unsupported.
+
+3. Bounded framing/checksum experiments
+   calibration-framing-20261105T012714Z.jsonl / .summary.json / .rx.bin
+   Experimental hypotheses, NOT discovered or documented working commands:
+   - append CR to the exact vendor calibration packet;
+   - checksum CSICAL plus address/high/low;
+   - checksum the entire frame preceding its checksum byte.
+
+   Each used address 50, raw 126, and then raw 125 in the SAME tested format.
+   Original vendor-format raw 125 was also sent at the end. Each variant
+   had three temporary and three final status checks. The runner first
+   passed offline tests for acceptance, ignored packets, and a lost reply
+   that must still trigger restoration.
+
+   Live result: 41.234 seconds, 1,806 RX bytes, 21 valid status frames,
+   zero unclassified bytes, zero warning/fault frames. Every calibration
+   readback remained 125. Battery measurements stayed 52.1 V. All reported
+   settings, including bulk 14.1, and extension bytes stayed unchanged.
+   Seven calibration-format writes total, no normal parameter writes.
+   No format produced an observable adjustment. Unchanged readback after
+   an original-value write does not prove either write was accepted.
+
+4. Parser discovery
+   parser-discovery-20261105T013528Z.jsonl / .summary.json / .rx.bin
+   Six heartbeat framing variations plus ten documented UPS read queries.
+   Only the normal CMSG/INV-HB request with an appended CR produced a reply.
+   Naked INV-HB, wrong outer header, zero or padded length, and lowercase token
+   produced none. I, F, QRI (plain CR), and QPI, QPIGS, QPIRI, QVFW, QVB, QVOP,
+   QVC (CRC plus CR) produced none. Valid normal health checks followed each
+   probe; configuration stayed unchanged. No setting writes.
+   This characterizes those tested inputs, not every possible parser state.
+
+5. Normal parameter family at the battery-calibration address
+   calibration-parameter-family-20261105T013741Z.*
+   CSPA/CSIPAM, address 50, raw 126 followed by raw 125; final original CSCA
+   raw 125 packet also sent. All nine status frames reported calibration 125.
+   All 774 received bytes belonged to valid status frames. No extra replies,
+   warnings, faults, or configuration changes.
+
+6. Larger observable-effect test
+   calibration-effect-20261105T014243Z.*
+   Original CSCA/CSICAL, battery address 50, raw 130 (+0.5% in the PC utility),
+   then raw 125. The larger value would correspond to about 0.26 V at 52.1 V
+   if the PC percentage mapping actually controls the reported measurement.
+   Six baseline, eight temporary, eight restored, and one final status frame:
+   all 23 reported battery 52.1 V and calibration 125. All 1,978 RX bytes were
+   valid status frames, with no extra bytes or warnings/faults. Final complete
+   configuration matched baseline. This reduces, but does not eliminate,
+   ambiguity from 0.1 V report resolution or a nonfunctional readback field.
+
+7. Six additional checksum/token hypotheses
+   calibration-parser-variants-20261105T014356Z.*
+   XOR data checksum; two's-complement sum; one's-complement sum; checksum
+   excluding address; CSPA header with CSICAL token; CSCA header with CSIPAM
+   token. Each kept battery address 50 and used raw 126 then raw 125 in the
+   same format. Original-format raw 125 was sent at the end. All 39 status
+   frames reported 125; all 3,354 RX bytes were valid status; no extra replies
+   or warnings/faults. Complete configuration unchanged. These were bounded
+   experimental hypotheses, not discovered working command variants.
+
+8. New Chinese-source protocol queries and zero-amount BTA probes
+   parser-tqf-read-20261105T014934Z.*
+   Public TQF-AllInOne source supplies QPRTL, HIMSG1, HBAT, HEEP1, HEEP2, HOP,
+   HGRID. All seven were tested as plain CR and CRC-plus-CR requests: fourteen
+   probes, no replies to them; normal VPHB health checks succeeded throughout.
+
+   parser-bta-zero-20261105T015118Z.*
+   BTA+00 with CRC-plus-CR, and BTA+00 with plain CR, also returned no bytes.
+   These are TWO ZERO-AMOUNT CALIBRATION WRITE PROBES, not read-only queries.
+   The zero amount is documented for different MPP Solar hardware. It does
+   not establish support or identical semantics on this inverter. Battery
+   voltage, calibration readback and configuration stayed unchanged.
+   No nonzero BTA, PSAVE, reset, factory-entry or protection command was sent.
+   The exact one-digit BTA+1 used by the newer source was not tested.
+   Full source links, protocol distinctions and limits are recorded in
+   chinese-reference-findings.txt.
+
+9. Quiet timing, output-off attempt, and output-on/no-load test
+   calibration-quiet-effect-20261105T015320Z.*
+   Original CSCA raw 130 then 125, with FIVE seconds without polling before
+   and after each write. The newer Chinese-source PC utility pauses polling
+   and waits two seconds before setting writes, motivating this hypothesis.
+   All 23 frames still reported battery 52.1 V and calibration 125. All 1,978
+   bytes were valid status frames; no additional replies, warnings or faults.
+
+   calibration-standby-effect-20261105T015645Z.*
+   With permission, the user turned AC output off using the front panel.
+   COM4 opened, but the initial heartbeat received no response within its
+   1.5-second window. The baseline guard aborted BEFORE ANY CALIBRATION WRITE.
+   Zero RX bytes. COM4 closed. The test cannot establish whether calibration
+   works in standby or whether a different service standby state exists.
+
+   post-standby-20261105T0158.jsonl
+   The user turned output back on. Three status replies confirmed restored
+   communication and output, no warnings/faults, bulk 14.1 and all six
+   calibration values 125. The reported load was now 0%.
+
+   calibration-quiet-effect-20261105T015849Z.*
+   Repeated the bounded +0.5% / original-value test with five-second quiet
+   intervals. All 23 frames reported 0% load, battery 52.1 V, calibration 125;
+   no observable adjustment. All 1,978 RX bytes were valid status frames.
+   No unclassified bytes or warnings/faults. Complete configuration matched
+   baseline, final output 119.5 V at 60 Hz, and COM4 closed.
+
+For all temporary-change experiments, an original-value packet was sent
+afterward, including on the tested failure paths. Unchanged values following
+that packet do NOT prove restoration was accepted: no change was observed
+in the first place. The output-off experiment aborted before any such write.
+
+POWMR / PUBLIC-SOURCE FINDINGS
+
+PowMr RELAB capture posted by its owner:
+https://github.com/softwarecrash/Solar2MQTT-ESP8266/discussions/234
+https://github.com/user-attachments/files/19836494/COM6.Monitoring.Session.zip
+We recovered 207 valid VPHB occurrences from its .spm container. Identity:
+12548, firmware 1.09, charger 1.01, four 12 V units, 84-byte status frames.
+The capture includes the Techfine Runtime 001 - V1.03.exe application path.
+All six calibration bytes are 125. No CSCA/CSICAL/CSPA occurrences were found.
+This corroborates the software/protocol family, but supplies no successful
+calibration transaction and does not establish identical firmware behavior.
+
+Public V-Series installer shared by the protocol researcher:
+https://mybroadband.co.za/forum/threads/fivestar-sunmagic-rs232-protocol-decoding.1242521/
+The downloaded archive passed ZIP CRC checks. Its installer differs from
+the user's installer, but its embedded 318,976-byte Techfine executable is
+BYTE-IDENTICAL to the installed executable. Extracted statically through
+Python LZMA; the downloaded application/installer was never run.
+Executable SHA-256:
+92c694b3850859d3f6f780911557a4a6b9ac179b2e26c53de06a425a188f5121
+Thus this archive provides no alternate calibration implementation.
+
+PowMr official manual archive:
+https://powmr.com/pages/powmr-user-manual
+https://drive.google.com/drive/folders/1SwkXgYAr_c3Y_JqsXPwMMTFvBZIK2YTi
+Reviewed RELAB-SPLIT V2.1.0403 and RELAB V1.12.0930. Their public settings and
+communication sections did not provide a calibration command or service unlock.
+The official Techfine VS manual also yielded no calibration procedure:
+https://techfinepv.com/wp-content/uploads/VS-SERIES-6.3%E2%80%9312.5KVA_UM.pdf
+Public user manuals are not proof that a factory/service procedure is absent.
+
+Newer PowMr H-command implementation, a different firmware/model family:
+https://github.com/kOld/solarplug-esphome/blob/main/docs/protocol/H_COMMANDS.md
+https://github.com/kOld/solarplug-esphome/blob/main/docs/protocol/COMPATIBILITY.md
+Its confirmed hardware is POW-HVM6.2KP. RELAB compatibility is a lead, not a
+verified equivalent. Two documented read queries returned nothing here.
+
+Legacy protocol references used only to select read-only probes:
+https://networkupstools.org/protocols/megatec.html
+https://networkupstools.org/protocols/voltronic.html
+https://d7rh5s3nxmpy4.cloudfront.net/CMP1313/files/IQ02701.pdf
+
+Chinese-source research found a different PC utility with battery increment/
+decrement and a separate save-calibration operation. This is a useful lead,
+but neither its protocol identity queries nor the zero-amount probes elicited
+a reply from this firmware. See chinese-reference-findings.txt. No evidence
+yet ties its BTA/PSAVE protocol to machine 8048 firmware 2.10's VPHB interface.
+
+WHAT WOULD UNBLOCK A REAL FIX
+
+Obtain the calibration protocol or factory/service utility matched to machine
+8048 / VS8048AMN, inverter firmware 2.10, charger firmware 1.01. Specifically:
+- Does this firmware support CSCA/CSICAL and addresses 0x30 through 0x35?
+- What unlock/service state, operating condition, or physical enable is needed?
+- What address/value/checksum format and success/error reply should be used?
+- Where is the accepted calibration read back, and what commits it to storage?
+- Is calibration support absent or defective in firmware 2.10, and is there
+  an official fix explicitly matching this hardware revision?
+
+A timestamped capture of a successful calibration on the same firmware would
+also resolve the command sequence. An inverter firmware image would allow
+offline parser inspection, although extracting/flashing one is a separate
+task and has not been attempted. No firmware changes, reset commands, protocol
+start/stop/mode commands, or arbitrary address sweeps were performed. The user
+briefly switched output off and back on for the authorized standby experiment.
+
+Acceptance criteria once the command path is identified: observe the temporary
+battery calibration value change, check that other fields stay unchanged,
+restore the exact baseline and observe it return; only then apply the desired
+correction and separately verify persistence through an agreed restart. Test
+the other five controls individually under appropriate operating conditions;
+one successful battery command does not prove all six controls work.

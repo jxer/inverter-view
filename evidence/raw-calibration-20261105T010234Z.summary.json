@@ -1,0 +1,47 @@
+{
+  "result": {
+    "original_raw": 125,
+    "temporary_raw": 126,
+    "temporary_readbacks": [
+      125,
+      125,
+      125,
+      125
+    ],
+    "final_readbacks": [
+      125,
+      125,
+      125
+    ],
+    "temporary_change_observed": false,
+    "final_known_settings_match_baseline": true,
+    "bulk_per_12v_unit_v": 14.1,
+    "temporary_test_error": null,
+    "restoration_error": null,
+    "acceptance_proven_by_unchanged_readback": false
+  },
+  "capture": {
+    "total_rx_bytes": 774,
+    "valid_status_frames": 9,
+    "bytes_in_valid_status_frames": 774,
+    "unclassified_rx_bytes": 0,
+    "unclassified_segments": [],
+    "invalid_status_candidates": [],
+    "calibration_readbacks": [
+      125,
+      125,
+      125,
+      125,
+      125,
+      125,
+      125,
+      125,
+      125
+    ],
+    "warning_or_fault_frames": 0
+  },
+  "error": null,
+  "port_closed": true,
+  "journal_path": "<local-user>\\Documents\\Codex\\2026-11-04\\i-h\\outputs\\inverter-reader\\raw-calibration-20261105T010234Z.jsonl",
+  "duration_seconds": 25.766
+}

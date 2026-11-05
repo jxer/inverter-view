@@ -1,0 +1,45 @@
+{
+  "responses": 10,
+  "independently_valid_checksums": 10,
+  "frame_lengths": [
+    86
+  ],
+  "first_received_utc": "2026-11-05T00:32:56.131277+00:00",
+  "last_received_utc": "2026-11-05T00:33:05.140759+00:00",
+  "elapsed_first_to_last_seconds": 9.009482,
+  "observed_values": {
+    "battery_voltage_v": [
+      52.2
+    ],
+    "output_voltage_reported_v": [
+      119.5,
+      119.6,
+      119.7
+    ],
+    "output_frequency_hz": [
+      60.0
+    ],
+    "load_percent": [
+      3
+    ],
+    "inverter_temperature_c": [
+      24
+    ],
+    "charger_temperature_c": [
+      24
+    ],
+    "operating_mode": [
+      "DC Mode"
+    ],
+    "warning_bytes_hex": [
+      "00 00 00"
+    ],
+    "fault_bytes_hex": [
+      "00 00 00"
+    ],
+    "unmapped_extension_hex": [
+      "01 73 82 04 03 01 0a 14 5f 32 6c 00 00"
+    ]
+  },
+  "settings_differing_from_original_capture": {}
+}

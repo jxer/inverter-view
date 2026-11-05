@@ -1,0 +1,145 @@
+{"utc":"2026-11-05T02:40:52.5401654Z","kind":"Connection","message":"Opened COM4 at 2400 baud, 8N1","hex":null}
+{"utc":"2026-11-05T02:40:52.6406913Z","kind":"TX intent","message":"Read status","hex":"43 4D 53 47 06 49 4E 56 2D 48 42"}
+{"utc":"2026-11-05T02:40:52.6466884Z","kind":"TX sent","message":"Read status","hex":"43 4D 53 47 06 49 4E 56 2D 48 42"}
+{"utc":"2026-11-05T02:40:52.7198353Z","kind":"RX","message":"Serial bytes","hex":"56 50 48 42"}
+{"utc":"2026-11-05T02:40:52.7358360Z","kind":"RX","message":"Serial bytes","hex":"51 08 00"}
+{"utc":"2026-11-05T02:40:52.7517035Z","kind":"RX","message":"Serial bytes","hex":"00 00 00 00"}
+{"utc":"2026-11-05T02:40:52.7667037Z","kind":"RX","message":"Serial bytes","hex":"00 00 00"}
+{"utc":"2026-11-05T02:40:52.7827070Z","kind":"RX","message":"Serial bytes","hex":"02 0A 50"}
+{"utc":"2026-11-05T02:40:52.7982177Z","kind":"RX","message":"Serial bytes","hex":"00 00 00 00"}
+{"utc":"2026-11-05T02:40:52.8142157Z","kind":"RX","message":"Serial bytes","hex":"A9 04 58"}
+{"utc":"2026-11-05T02:40:52.8302156Z","kind":"RX","message":"Serial bytes","hex":"02 09 02 64"}
+{"utc":"2026-11-05T02:40:52.8462175Z","kind":"RX","message":"Serial bytes","hex":"00 00 19"}
+{"utc":"2026-11-05T02:40:52.8612170Z","kind":"RX","message":"Serial bytes","hex":"14 05 F3 00"}
+{"utc":"2026-11-05T02:40:52.8772234Z","kind":"RX","message":"Serial bytes","hex":"06 04 01"}
+{"utc":"2026-11-05T02:40:52.8927356Z","kind":"RX","message":"Serial bytes","hex":"01 00 00"}
+{"utc":"2026-11-05T02:40:52.9087393Z","kind":"RX","message":"Serial bytes","hex":"00 1A 14 7D"}
+{"utc":"2026-11-05T02:40:52.9247351Z","kind":"RX","message":"Serial bytes","hex":"7D 7D 7D"}
+{"utc":"2026-11-05T02:40:52.9407345Z","kind":"RX","message":"Serial bytes","hex":"7D 7D 01 01"}
+{"utc":"2026-11-05T02:40:52.9557343Z","kind":"RX","message":"Serial bytes","hex":"03 02 32"}
+{"utc":"2026-11-05T02:40:52.9717374Z","kind":"RX","message":"Serial bytes","hex":"64 8D 85 68"}
+{"utc":"2026-11-05T02:40:52.9872460Z","kind":"RX","message":"Serial bytes","hex":"7A 82 F0"}
+{"utc":"2026-11-05T02:40:53.0032481Z","kind":"RX","message":"Serial bytes","hex":"02 02 02"}
+{"utc":"2026-11-05T02:40:53.0182465Z","kind":"RX","message":"Serial bytes","hex":"03 01 02 02"}
+{"utc":"2026-11-05T02:40:53.0342473Z","kind":"RX","message":"Serial bytes","hex":"01 00 00"}
+{"utc":"2026-11-05T02:40:53.0492473Z","kind":"RX","message":"Serial bytes","hex":"01 73 82"}
+{"utc":"2026-11-05T02:40:53.0652470Z","kind":"RX","message":"Serial bytes","hex":"04 03 01 0A"}
+{"utc":"2026-11-05T02:40:53.0802510Z","kind":"RX","message":"Serial bytes","hex":"14 5F 32"}
+{"utc":"2026-11-05T02:40:53.0957618Z","kind":"RX","message":"Serial bytes","hex":"6C 00 00 52"}
+{"utc":"2026-11-05T02:40:53.6479419Z","kind":"TX intent","message":"Read status","hex":"43 4D 53 47 06 49 4E 56 2D 48 42"}
+{"utc":"2026-11-05T02:40:53.6499436Z","kind":"TX sent","message":"Read status","hex":"43 4D 53 47 06 49 4E 56 2D 48 42"}
+{"utc":"2026-11-05T02:40:53.7104523Z","kind":"RX","message":"Serial bytes","hex":"56 50"}
+{"utc":"2026-11-05T02:40:53.7264563Z","kind":"RX","message":"Serial bytes","hex":"48 42 51"}
+{"utc":"2026-11-05T02:40:53.7424538Z","kind":"RX","message":"Serial bytes","hex":"08 00 00 00"}
+{"utc":"2026-11-05T02:40:53.7584545Z","kind":"RX","message":"Serial bytes","hex":"00 00 00"}
+{"utc":"2026-11-05T02:40:53.7744580Z","kind":"RX","message":"Serial bytes","hex":"00 00 02 0A"}
+{"utc":"2026-11-05T02:40:53.7899660Z","kind":"RX","message":"Serial bytes","hex":"50 00 00"}
+{"utc":"2026-11-05T02:40:53.8059662Z","kind":"RX","message":"Serial bytes","hex":"00 00 AA 04"}
+{"utc":"2026-11-05T02:40:53.8219661Z","kind":"RX","message":"Serial bytes","hex":"58 02 09"}
+{"utc":"2026-11-05T02:40:53.8379673Z","kind":"RX","message":"Serial bytes","hex":"02 64 00 00"}
+{"utc":"2026-11-05T02:40:53.8533744Z","kind":"RX","message":"Serial bytes","hex":"19 14 05"}
+{"utc":"2026-11-05T02:40:53.8693747Z","kind":"RX","message":"Serial bytes","hex":"F3 00 06"}
+{"utc":"2026-11-05T02:40:53.8853801Z","kind":"RX","message":"Serial bytes","hex":"04 01 01 00"}
+{"utc":"2026-11-05T02:40:53.9010587Z","kind":"RX","message":"Serial bytes","hex":"00 00 1A"}
+{"utc":"2026-11-05T02:40:53.9170557Z","kind":"RX","message":"Serial bytes","hex":"14 7D 7D 7D"}
+{"utc":"2026-11-05T02:40:53.9330554Z","kind":"RX","message":"Serial bytes","hex":"7D 7D 7D"}
+{"utc":"2026-11-05T02:40:53.9490546Z","kind":"RX","message":"Serial bytes","hex":"01 01 03 02"}
+{"utc":"2026-11-05T02:40:53.9640567Z","kind":"RX","message":"Serial bytes","hex":"32 64 8D"}
+{"utc":"2026-11-05T02:40:53.9800612Z","kind":"RX","message":"Serial bytes","hex":"85 68 7A"}
+{"utc":"2026-11-05T02:40:53.9800612Z","kind":"RX","message":"Serial bytes","hex":"82"}
+{"utc":"2026-11-05T02:40:53.9960863Z","kind":"RX","message":"Serial bytes","hex":"F0 02 02"}
+{"utc":"2026-11-05T02:40:54.0113689Z","kind":"RX","message":"Serial bytes","hex":"02 03 01"}
+{"utc":"2026-11-05T02:40:54.0273692Z","kind":"RX","message":"Serial bytes","hex":"02 02 01 00"}
+{"utc":"2026-11-05T02:40:54.0433678Z","kind":"RX","message":"Serial bytes","hex":"00 01 73"}
+{"utc":"2026-11-05T02:40:54.0593696Z","kind":"RX","message":"Serial bytes","hex":"82 04 03 01"}
+{"utc":"2026-11-05T02:40:54.0753734Z","kind":"RX","message":"Serial bytes","hex":"0A 14 5F"}
+{"utc":"2026-11-05T02:40:54.0908821Z","kind":"RX","message":"Serial bytes","hex":"32 6C 00 00"}
+{"utc":"2026-11-05T02:40:54.1068844Z","kind":"RX","message":"Serial bytes","hex":"53"}
+{"utc":"2026-11-05T02:40:54.6615179Z","kind":"TX intent","message":"Read status","hex":"43 4D 53 47 06 49 4E 56 2D 48 42"}
+{"utc":"2026-11-05T02:40:54.6655189Z","kind":"TX sent","message":"Read status","hex":"43 4D 53 47 06 49 4E 56 2D 48 42"}
+{"utc":"2026-11-05T02:40:54.7246261Z","kind":"RX","message":"Serial bytes","hex":"56"}
+{"utc":"2026-11-05T02:40:54.7406243Z","kind":"RX","message":"Serial bytes","hex":"50 48 42"}
+{"utc":"2026-11-05T02:40:54.7566264Z","kind":"RX","message":"Serial bytes","hex":"51 08 00"}
+{"utc":"2026-11-05T02:40:54.7566264Z","kind":"RX","message":"Serial bytes","hex":"00"}
+{"utc":"2026-11-05T02:40:54.7726267Z","kind":"RX","message":"Serial bytes","hex":"00 00 00"}
+{"utc":"2026-11-05T02:40:54.7886290Z","kind":"RX","message":"Serial bytes","hex":"00 00 00"}
+{"utc":"2026-11-05T02:40:54.8038150Z","kind":"RX","message":"Serial bytes","hex":"02 0A 50 00"}
+{"utc":"2026-11-05T02:40:54.8198135Z","kind":"RX","message":"Serial bytes","hex":"00 00 00"}
+{"utc":"2026-11-05T02:40:54.8358154Z","kind":"RX","message":"Serial bytes","hex":"AB 04 58 02"}
+{"utc":"2026-11-05T02:40:54.8518133Z","kind":"RX","message":"Serial bytes","hex":"09 02 64"}
+{"utc":"2026-11-05T02:40:54.8678172Z","kind":"RX","message":"Serial bytes","hex":"00 00 19 14"}
+{"utc":"2026-11-05T02:40:54.8838223Z","kind":"RX","message":"Serial bytes","hex":"05 F3 00"}
+{"utc":"2026-11-05T02:40:54.8989094Z","kind":"RX","message":"Serial bytes","hex":"06 04 01"}
+{"utc":"2026-11-05T02:40:54.9009086Z","kind":"RX","message":"Serial bytes","hex":"01"}
+{"utc":"2026-11-05T02:40:54.9139097Z","kind":"RX","message":"Serial bytes","hex":"00 00 00"}
+{"utc":"2026-11-05T02:40:54.9297365Z","kind":"RX","message":"Serial bytes","hex":"1A 14 7D"}
+{"utc":"2026-11-05T02:40:54.9457356Z","kind":"RX","message":"Serial bytes","hex":"7D 7D 7D 7D"}
+{"utc":"2026-11-05T02:40:54.9617352Z","kind":"RX","message":"Serial bytes","hex":"7D 01 01"}
+{"utc":"2026-11-05T02:40:54.9767357Z","kind":"RX","message":"Serial bytes","hex":"03 02 32"}
+{"utc":"2026-11-05T02:40:54.9932491Z","kind":"RX","message":"Serial bytes","hex":"64 8D 85 68"}
+{"utc":"2026-11-05T02:40:55.0092564Z","kind":"RX","message":"Serial bytes","hex":"7A 82 F0"}
+{"utc":"2026-11-05T02:40:55.0092564Z","kind":"RX","message":"Serial bytes","hex":"02"}
+{"utc":"2026-11-05T02:40:55.0252566Z","kind":"RX","message":"Serial bytes","hex":"02 02 03"}
+{"utc":"2026-11-05T02:40:55.0412565Z","kind":"RX","message":"Serial bytes","hex":"01 02 02"}
+{"utc":"2026-11-05T02:40:55.0572565Z","kind":"RX","message":"Serial bytes","hex":"01 00 00 01"}
+{"utc":"2026-11-05T02:40:55.0732555Z","kind":"RX","message":"Serial bytes","hex":"73 82 04"}
+{"utc":"2026-11-05T02:40:55.0892617Z","kind":"RX","message":"Serial bytes","hex":"03 01 0A 14"}
+{"utc":"2026-11-05T02:40:55.1047746Z","kind":"RX","message":"Serial bytes","hex":"5F 32 6C"}
+{"utc":"2026-11-05T02:40:55.1207730Z","kind":"RX","message":"Serial bytes","hex":"00 00 54"}
+{"utc":"2026-11-05T02:40:55.6719892Z","kind":"TX intent","message":"Read status","hex":"43 4D 53 47 06 49 4E 56 2D 48 42"}
+{"utc":"2026-11-05T02:40:55.6759893Z","kind":"TX sent","message":"Read status","hex":"43 4D 53 47 06 49 4E 56 2D 48 42"}
+{"utc":"2026-11-05T02:40:55.7348185Z","kind":"RX","message":"Serial bytes","hex":"56"}
+{"utc":"2026-11-05T02:40:55.7508162Z","kind":"RX","message":"Serial bytes","hex":"50 48 42"}
+{"utc":"2026-11-05T02:40:55.7661541Z","kind":"RX","message":"Serial bytes","hex":"51 08 00"}
+{"utc":"2026-11-05T02:40:55.7821213Z","kind":"RX","message":"Serial bytes","hex":"00 00 00 00"}
+{"utc":"2026-11-05T02:40:55.7977746Z","kind":"RX","message":"Serial bytes","hex":"00 00 00"}
+{"utc":"2026-11-05T02:40:55.8137735Z","kind":"RX","message":"Serial bytes","hex":"02 0A 50 00"}
+{"utc":"2026-11-05T02:40:55.8297758Z","kind":"RX","message":"Serial bytes","hex":"00 00 00"}
+{"utc":"2026-11-05T02:40:55.8457747Z","kind":"RX","message":"Serial bytes","hex":"A9 04 58 02"}
+{"utc":"2026-11-05T02:40:55.8611334Z","kind":"RX","message":"Serial bytes","hex":"09 02 64"}
+{"utc":"2026-11-05T02:40:55.8772478Z","kind":"RX","message":"Serial bytes","hex":"00 00 19 14"}
+{"utc":"2026-11-05T02:40:55.8922497Z","kind":"RX","message":"Serial bytes","hex":"05 F3 00"}
+{"utc":"2026-11-05T02:40:55.9077665Z","kind":"RX","message":"Serial bytes","hex":"06 04 01"}
+{"utc":"2026-11-05T02:40:55.9237636Z","kind":"RX","message":"Serial bytes","hex":"01 00 00 00"}
+{"utc":"2026-11-05T02:40:55.9397642Z","kind":"RX","message":"Serial bytes","hex":"1A 14 7D"}
+{"utc":"2026-11-05T02:40:55.9557635Z","kind":"RX","message":"Serial bytes","hex":"7D 7D 7D 7D"}
+{"utc":"2026-11-05T02:40:55.9717633Z","kind":"RX","message":"Serial bytes","hex":"7D 01 01"}
+{"utc":"2026-11-05T02:40:55.9877686Z","kind":"RX","message":"Serial bytes","hex":"03 02 32 64"}
+{"utc":"2026-11-05T02:40:56.0032842Z","kind":"RX","message":"Serial bytes","hex":"8D 85 68"}
+{"utc":"2026-11-05T02:40:56.0188699Z","kind":"RX","message":"Serial bytes","hex":"7A 82 F0"}
+{"utc":"2026-11-05T02:40:56.0340777Z","kind":"RX","message":"Serial bytes","hex":"02 02 02 03"}
+{"utc":"2026-11-05T02:40:56.0501102Z","kind":"RX","message":"Serial bytes","hex":"01 02 02"}
+{"utc":"2026-11-05T02:40:56.0661130Z","kind":"RX","message":"Serial bytes","hex":"01 00 00 01"}
+{"utc":"2026-11-05T02:40:56.0812629Z","kind":"RX","message":"Serial bytes","hex":"73 82 04"}
+{"utc":"2026-11-05T02:40:56.0962652Z","kind":"RX","message":"Serial bytes","hex":"03 01 0A"}
+{"utc":"2026-11-05T02:40:56.1115814Z","kind":"RX","message":"Serial bytes","hex":"14 5F 32 6C"}
+{"utc":"2026-11-05T02:40:56.1275158Z","kind":"RX","message":"Serial bytes","hex":"00 00 52"}
+{"utc":"2026-11-05T02:40:56.6820490Z","kind":"TX intent","message":"Read status","hex":"43 4D 53 47 06 49 4E 56 2D 48 42"}
+{"utc":"2026-11-05T02:40:56.6860542Z","kind":"TX sent","message":"Read status","hex":"43 4D 53 47 06 49 4E 56 2D 48 42"}
+{"utc":"2026-11-05T02:40:56.7595647Z","kind":"RX","message":"Serial bytes","hex":"56 50 48 42"}
+{"utc":"2026-11-05T02:40:56.7755633Z","kind":"RX","message":"Serial bytes","hex":"51 08 00"}
+{"utc":"2026-11-05T02:40:56.7915700Z","kind":"RX","message":"Serial bytes","hex":"00 00 00 00"}
+{"utc":"2026-11-05T02:40:56.8070819Z","kind":"RX","message":"Serial bytes","hex":"00 00 00"}
+{"utc":"2026-11-05T02:40:56.8230830Z","kind":"RX","message":"Serial bytes","hex":"02 0A 50 00"}
+{"utc":"2026-11-05T02:40:56.8390820Z","kind":"RX","message":"Serial bytes","hex":"00 00 00"}
+{"utc":"2026-11-05T02:40:56.8550824Z","kind":"RX","message":"Serial bytes","hex":"AA 04 58 02"}
+{"utc":"2026-11-05T02:40:56.8710806Z","kind":"RX","message":"Serial bytes","hex":"09 02 64"}
+{"utc":"2026-11-05T02:40:56.8870840Z","kind":"RX","message":"Serial bytes","hex":"00 00 19 14"}
+{"utc":"2026-11-05T02:40:56.9025961Z","kind":"RX","message":"Serial bytes","hex":"05 F3 00"}
+{"utc":"2026-11-05T02:40:56.9185959Z","kind":"RX","message":"Serial bytes","hex":"06 04 01"}
+{"utc":"2026-11-05T02:40:56.9345967Z","kind":"RX","message":"Serial bytes","hex":"01 00 00 00"}
+{"utc":"2026-11-05T02:40:56.9505957Z","kind":"RX","message":"Serial bytes","hex":"1A 14 7D"}
+{"utc":"2026-11-05T02:40:56.9665966Z","kind":"RX","message":"Serial bytes","hex":"7D 7D 7D 7D"}
+{"utc":"2026-11-05T02:40:56.9815964Z","kind":"RX","message":"Serial bytes","hex":"7D 01 01"}
+{"utc":"2026-11-05T02:40:56.9976003Z","kind":"RX","message":"Serial bytes","hex":"03 02 32 64"}
+{"utc":"2026-11-05T02:40:57.0131152Z","kind":"RX","message":"Serial bytes","hex":"8D 85 68"}
+{"utc":"2026-11-05T02:40:57.0291185Z","kind":"RX","message":"Serial bytes","hex":"7A 82 F0"}
+{"utc":"2026-11-05T02:40:57.0451143Z","kind":"RX","message":"Serial bytes","hex":"02 02 02 03"}
+{"utc":"2026-11-05T02:40:57.0601169Z","kind":"RX","message":"Serial bytes","hex":"01 02 02"}
+{"utc":"2026-11-05T02:40:57.0761132Z","kind":"RX","message":"Serial bytes","hex":"01 00 00 01"}
+{"utc":"2026-11-05T02:40:57.0921218Z","kind":"RX","message":"Serial bytes","hex":"73 82 04"}
+{"utc":"2026-11-05T02:40:57.1076289Z","kind":"RX","message":"Serial bytes","hex":"03 01 0A"}
+{"utc":"2026-11-05T02:40:57.1076289Z","kind":"RX","message":"Serial bytes","hex":"14"}
+{"utc":"2026-11-05T02:40:57.1236297Z","kind":"RX","message":"Serial bytes","hex":"5F 32 6C"}
+{"utc":"2026-11-05T02:40:57.1396297Z","kind":"RX","message":"Serial bytes","hex":"00 00 53"}
+{"utc":"2026-11-05T02:40:57.7317413Z","kind":"Connection","message":"Serial port closed","hex":null}

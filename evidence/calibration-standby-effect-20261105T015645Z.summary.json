@@ -1,0 +1,15 @@
+{
+  "result": null,
+  "error": "RuntimeError: Expected one fresh status response, got 0: baseline_1",
+  "port_closed": true,
+  "capture": {
+    "total_rx_bytes": 0,
+    "valid_status_frames": 0,
+    "bytes_in_valid_status_frames": 0,
+    "unclassified_rx_bytes": 0,
+    "unclassified_segments": [],
+    "invalid_status_candidates": [],
+    "calibration_readbacks": [],
+    "warning_or_fault_frames": 0
+  }
+}

@@ -1,0 +1,7 @@
+build/
+Logs/
+*.user
+*.pdb
+__pycache__/
+*.pyc
+preferences.json

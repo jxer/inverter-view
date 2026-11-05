@@ -1,0 +1,39 @@
+{
+  "responses": [
+    {
+      "query": "QPI",
+      "rx_hex": "",
+      "rx_ascii": "b''"
+    },
+    {
+      "query": "QVB",
+      "rx_hex": "",
+      "rx_ascii": "b''"
+    },
+    {
+      "query": "QVOP",
+      "rx_hex": "",
+      "rx_ascii": "b''"
+    },
+    {
+      "query": "QVC",
+      "rx_hex": "",
+      "rx_ascii": "b''"
+    },
+    {
+      "query": "QBV",
+      "rx_hex": "",
+      "rx_ascii": "b''"
+    },
+    {
+      "query": "QVFW",
+      "rx_hex": "",
+      "rx_ascii": "b''"
+    }
+  ],
+  "error": null,
+  "port_closed": true,
+  "total_rx_bytes": 602,
+  "setting_writes_sent": 0,
+  "query_group": "legacy-calibration"
+}

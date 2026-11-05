@@ -1,0 +1,176 @@
+{
+  "responses": [
+    {
+      "label": "heartbeat_naked",
+      "tx_hex": "49 4e 56 2d 48 42 0d",
+      "rx_hex": "",
+      "rx_ascii": "b''",
+      "rx_bytes": 0
+    },
+    {
+      "label": "heartbeat_wrong_outer_id",
+      "tx_hex": "5a 5a 5a 5a 06 49 4e 56 2d 48 42",
+      "rx_hex": "",
+      "rx_ascii": "b''",
+      "rx_bytes": 0
+    },
+    {
+      "label": "heartbeat_zero_length",
+      "tx_hex": "43 4d 53 47 00 49 4e 56 2d 48 42",
+      "rx_hex": "",
+      "rx_ascii": "b''",
+      "rx_bytes": 0
+    },
+    {
+      "label": "heartbeat_length_7_padded",
+      "tx_hex": "43 4d 53 47 07 49 4e 56 2d 48 42 00",
+      "rx_hex": "",
+      "rx_ascii": "b''",
+      "rx_bytes": 0
+    },
+    {
+      "label": "heartbeat_lowercase_token",
+      "tx_hex": "43 4d 53 47 06 69 6e 76 2d 68 62",
+      "rx_hex": "",
+      "rx_ascii": "b''",
+      "rx_bytes": 0
+    },
+    {
+      "label": "heartbeat_appended_CR",
+      "tx_hex": "43 4d 53 47 06 49 4e 56 2d 48 42 0d",
+      "rx_hex": "56 50 48 42 51 08 00 00 00 00 00 00 00 00 02 0a 50 00 00 00 00 ac 04 58 02 09 02 64 00 03 1a 14 05 f2 00 06 04 01 01 00 00 00 19 14 7d 7d 7d 7d 7d 7d 01 01 03 02 32 64 8d 85 68 7a 82 f0 02 02 02 03 01 02 02 01 00 00 01 73 82 04 03 01 0a 14 5f 32 6c 00 00 57",
+      "rx_ascii": "b'VPHBQ\\x08\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x02\\nP\\x00\\x00\\x00\\x00\\xac\\x04X\\x02\\t\\x02d\\x00\\x03\\x1a\\x14\\x05\\xf2\\x00\\x06\\x04\\x01\\x01\\x00\\x00\\x00\\x19\\x14}}}}}}\\x01\\x01\\x03\\x022d\\x8d\\x85hz\\x82\\xf0\\x02\\x02\\x02\\x03\\x01\\x02\\x02\\x01\\x00\\x00\\x01s\\x82\\x04\\x03\\x01\\n\\x14_2l\\x00\\x00W'",
+      "rx_bytes": 86
+    },
+    {
+      "label": "legacy_I",
+      "tx_hex": "49 0d",
+      "rx_hex": "",
+      "rx_ascii": "b''",
+      "rx_bytes": 0
+    },
+    {
+      "label": "legacy_F",
+      "tx_hex": "46 0d",
+      "rx_hex": "",
+      "rx_ascii": "b''",
+      "rx_bytes": 0
+    },
+    {
+      "label": "legacy_QRI",
+      "tx_hex": "51 52 49 0d",
+      "rx_hex": "",
+      "rx_ascii": "b''",
+      "rx_bytes": 0
+    },
+    {
+      "label": "QPI_crc",
+      "tx_hex": "51 50 49 be ac 0d",
+      "rx_hex": "",
+      "rx_ascii": "b''",
+      "rx_bytes": 0
+    },
+    {
+      "label": "QPIGS_crc",
+      "tx_hex": "51 50 49 47 53 b7 a9 0d",
+      "rx_hex": "",
+      "rx_ascii": "b''",
+      "rx_bytes": 0
+    },
+    {
+      "label": "QPIRI_crc",
+      "tx_hex": "51 50 49 52 49 f8 54 0d",
+      "rx_hex": "",
+      "rx_ascii": "b''",
+      "rx_bytes": 0
+    },
+    {
+      "label": "QVFW_crc",
+      "tx_hex": "51 56 46 57 62 99 0d",
+      "rx_hex": "",
+      "rx_ascii": "b''",
+      "rx_bytes": 0
+    },
+    {
+      "label": "QVB_crc",
+      "tx_hex": "51 56 42 a5 61 0d",
+      "rx_hex": "",
+      "rx_ascii": "b''",
+      "rx_bytes": 0
+    },
+    {
+      "label": "QVOP_crc",
+      "tx_hex": "51 56 4f 50 a8 e6 0d",
+      "rx_hex": "",
+      "rx_ascii": "b''",
+      "rx_bytes": 0
+    },
+    {
+      "label": "QVC_crc",
+      "tx_hex": "51 56 43 b5 40 0d",
+      "rx_hex": "",
+      "rx_ascii": "b''",
+      "rx_bytes": 0
+    }
+  ],
+  "error": null,
+  "port_closed": true,
+  "setting_writes": 0,
+  "final_reading": {
+    "header": "VPHB",
+    "frame_bytes": 86,
+    "payload_bytes_including_checksum": 81,
+    "checksum_valid": true,
+    "inverter_firmware": "2.10",
+    "charger_firmware": "1.01",
+    "machine_type_raw": 80,
+    "battery_12v_units": 4,
+    "machine_type_display": "8048",
+    "ac_input_voltage_v": 0.0,
+    "ac_input_frequency_hz": 0.0,
+    "output_voltage_reported_v": 119.7,
+    "output_frequency_hz": 60.0,
+    "battery_voltage_v": 52.1,
+    "battery_capacity_reported_percent": 100,
+    "ac_charge_current_a": 0,
+    "load_percent": 3,
+    "inverter_temperature_c": 26,
+    "controller_code_raw": 20,
+    "controller_code_hex": "0x14",
+    "runtime_hours": 242.5,
+    "state_step_raw": 6,
+    "operating_mode": "DC Mode",
+    "pv_voltage_v": 0,
+    "solar_charge_current_a": 0.0,
+    "charger_temperature_c": 26,
+    "charger_code_raw": 20,
+    "status_bytes_hex": "08 00 00",
+    "warning_bytes_hex": "00 00 00",
+    "fault_bytes_hex": "00 00 00",
+    "battery_full_flag": false,
+    "ac_charging_flag": false,
+    "solar_charging_flag": false,
+    "charger_connected_flag": true,
+    "controller_warning_flag": false,
+    "controller_fault_flag": false,
+    "charger_warning_flag": false,
+    "charger_fault_flag": false,
+    "work_mode_setting_raw": 3,
+    "work_mode_setting": "DC First",
+    "charge_mode_setting_raw": 2,
+    "charge_mode_setting": "Solar First",
+    "ac_charge_limit_percent": 50,
+    "solar_charge_limit_percent": 100,
+    "bulk_voltage_per_12v_unit_v": 14.1,
+    "float_voltage_per_12v_unit_v": 13.3,
+    "low_lock_voltage_per_12v_unit_v": 10.4,
+    "dc_to_ac_voltage_per_12v_unit_v": 12.2,
+    "ac_to_dc_voltage_per_12v_unit_v": 13.0,
+    "output_voltage_setting_v": 240,
+    "output_frequency_setting_hz": 60,
+    "uart_setting_raw": 0,
+    "unmapped_extension_hex": "01 73 82 04 03 01 0a 14 5f 32 6c 00 00",
+    "raw_hex": "56 50 48 42 51 08 00 00 00 00 00 00 00 00 02 0a 50 00 00 00 00 ad 04 58 02 09 02 64 00 03 1a 14 05 f2 00 06 04 01 01 00 00 00 1a 14 7d 7d 7d 7d 7d 7d 01 01 03 02 32 64 8d 85 68 7a 82 f0 02 02 02 03 01 02 02 01 00 00 01 73 82 04 03 01 0a 14 5f 32 6c 00 00 59"
+  },
+  "total_rx_bytes": 1548
+}

@@ -1,0 +1,176 @@
+{
+  "result": {
+    "quiet_seconds": 5,
+    "baseline_voltages": [
+      52.1,
+      52.1,
+      52.1,
+      52.1,
+      52.1,
+      52.1
+    ],
+    "temporary": [
+      {
+        "calibration_raw": 125,
+        "battery_v": 52.1
+      },
+      {
+        "calibration_raw": 125,
+        "battery_v": 52.1
+      },
+      {
+        "calibration_raw": 125,
+        "battery_v": 52.1
+      },
+      {
+        "calibration_raw": 125,
+        "battery_v": 52.1
+      },
+      {
+        "calibration_raw": 125,
+        "battery_v": 52.1
+      },
+      {
+        "calibration_raw": 125,
+        "battery_v": 52.1
+      },
+      {
+        "calibration_raw": 125,
+        "battery_v": 52.1
+      },
+      {
+        "calibration_raw": 125,
+        "battery_v": 52.1
+      }
+    ],
+    "restored": [
+      {
+        "calibration_raw": 125,
+        "battery_v": 52.1
+      },
+      {
+        "calibration_raw": 125,
+        "battery_v": 52.1
+      },
+      {
+        "calibration_raw": 125,
+        "battery_v": 52.1
+      },
+      {
+        "calibration_raw": 125,
+        "battery_v": 52.1
+      },
+      {
+        "calibration_raw": 125,
+        "battery_v": 52.1
+      },
+      {
+        "calibration_raw": 125,
+        "battery_v": 52.1
+      },
+      {
+        "calibration_raw": 125,
+        "battery_v": 52.1
+      },
+      {
+        "calibration_raw": 125,
+        "battery_v": 52.1
+      }
+    ],
+    "error": null,
+    "restore_error": null,
+    "final_configuration_matches": true,
+    "final_reading": {
+      "header": "VPHB",
+      "frame_bytes": 86,
+      "payload_bytes_including_checksum": 81,
+      "checksum_valid": true,
+      "inverter_firmware": "2.10",
+      "charger_firmware": "1.01",
+      "machine_type_raw": 80,
+      "battery_12v_units": 4,
+      "machine_type_display": "8048",
+      "ac_input_voltage_v": 0.0,
+      "ac_input_frequency_hz": 0.0,
+      "output_voltage_reported_v": 119.6,
+      "output_frequency_hz": 60.0,
+      "battery_voltage_v": 52.1,
+      "battery_capacity_reported_percent": 100,
+      "ac_charge_current_a": 0,
+      "load_percent": 3,
+      "inverter_temperature_c": 26,
+      "controller_code_raw": 20,
+      "controller_code_hex": "0x14",
+      "runtime_hours": 242.8,
+      "state_step_raw": 6,
+      "operating_mode": "DC Mode",
+      "pv_voltage_v": 0,
+      "solar_charge_current_a": 0.0,
+      "charger_temperature_c": 26,
+      "charger_code_raw": 20,
+      "status_bytes_hex": "08 00 00",
+      "warning_bytes_hex": "00 00 00",
+      "fault_bytes_hex": "00 00 00",
+      "battery_full_flag": false,
+      "ac_charging_flag": false,
+      "solar_charging_flag": false,
+      "charger_connected_flag": true,
+      "controller_warning_flag": false,
+      "controller_fault_flag": false,
+      "charger_warning_flag": false,
+      "charger_fault_flag": false,
+      "work_mode_setting_raw": 3,
+      "work_mode_setting": "DC First",
+      "charge_mode_setting_raw": 2,
+      "charge_mode_setting": "Solar First",
+      "ac_charge_limit_percent": 50,
+      "solar_charge_limit_percent": 100,
+      "bulk_voltage_per_12v_unit_v": 14.1,
+      "float_voltage_per_12v_unit_v": 13.3,
+      "low_lock_voltage_per_12v_unit_v": 10.4,
+      "dc_to_ac_voltage_per_12v_unit_v": 12.2,
+      "ac_to_dc_voltage_per_12v_unit_v": 13.0,
+      "output_voltage_setting_v": 240,
+      "output_frequency_setting_hz": 60,
+      "uart_setting_raw": 0,
+      "unmapped_extension_hex": "01 73 82 04 03 01 0a 14 5f 32 6c 00 00",
+      "raw_hex": "56 50 48 42 51 08 00 00 00 00 00 00 00 00 02 0a 50 00 00 00 00 ac 04 58 02 09 02 64 00 03 1a 14 08 f2 00 06 04 01 01 00 00 00 1a 14 7d 7d 7d 7d 7d 7d 01 01 03 02 32 64 8d 85 68 7a 82 f0 02 02 02 03 01 02 02 01 00 00 01 73 82 04 03 01 0a 14 5f 32 6c 00 00 5b"
+    }
+  },
+  "error": null,
+  "port_closed": true,
+  "capture": {
+    "total_rx_bytes": 1978,
+    "valid_status_frames": 23,
+    "bytes_in_valid_status_frames": 1978,
+    "unclassified_rx_bytes": 0,
+    "unclassified_segments": [],
+    "invalid_status_candidates": [],
+    "calibration_readbacks": [
+      125,
+      125,
+      125,
+      125,
+      125,
+      125,
+      125,
+      125,
+      125,
+      125,
+      125,
+      125,
+      125,
+      125,
+      125,
+      125,
+      125,
+      125,
+      125,
+      125,
+      125,
+      125,
+      125
+    ],
+    "warning_or_fault_frames": 0
+  }
+}
