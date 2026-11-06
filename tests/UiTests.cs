@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Forms;
 using InverterDesk;
@@ -9,6 +10,28 @@ static class UiTests
     static void Call(object o,string name,params object[] args){o.GetType().GetMethod(name,BindingFlags.Instance|BindingFlags.NonPublic).Invoke(o,args);}
     static void Assert(bool value,string message){if(!value)throw new Exception(message);}
     static Status ChangedStatus(Status s,int offset,int value){byte[] f=(byte[])s.Frame.Clone();f[5+offset]=(byte)value;int sum=0;for(int i=5;i<f.Length-1;i++)sum+=f[i];f[f.Length-1]=(byte)sum;return new Status(f);}
+    static void CheckChargingCards(MainForm form, Status baseline)
+    {
+        var amps = (Dictionary<string,Label>)Field(form, "metrics");
+        var watts = (Dictionary<string,Label>)Field(form, "chargingWatts");
+        Assert(watts["AC → Battery"].Text == "— W" && watts["Solar → Battery"].Text == "— W", "Power requires a reading");
+
+        // Deliberately distinct inputs: 52.3 V battery, 120.6 V AC and 63 V PV.
+        var sample = ChangedStatus(baseline, 20, 0x0B);
+        sample = ChangedStatus(sample, 12, 0xB6);
+        sample = ChangedStatus(sample, 13, 0x04);
+        sample = ChangedStatus(sample, 34, 63);
+        sample = ChangedStatus(sample, 23, 17);
+        sample = ChangedStatus(sample, 66, 7);
+        Call(form, "OnStatus", sample, true);
+        Assert(amps["AC → Battery"].Text == "17 A DC" && watts["AC → Battery"].Text == "≈ 889 W", "AC battery-side power");
+        Assert(amps["Solar → Battery"].Text == 0.7.ToString("0.#") + " A DC" && watts["Solar → Battery"].Text == "≈ 37 W", "Fractional solar battery-side power");
+
+        Call(form, "OnStatus", ChangedStatus(sample, 20, 0x1C), true); // 54.0 V, same currents.
+        Assert(watts["AC → Battery"].Text == "≈ 918 W" && watts["Solar → Battery"].Text == "≈ 38 W", "Both powers follow the new battery voltage");
+        Call(form, "OnStatus", baseline, true);
+        Assert(watts["AC → Battery"].Text == "≈ 0 W" && watts["Solar → Battery"].Text == "≈ 0 W", "Zero currents clear both previous power readings");
+    }
     [STAThread]
     static int Main(string[] args)
     {
@@ -17,7 +40,8 @@ static class UiTests
             Application.EnableVisualStyles();
             using(var form=new MainForm(false))
             {
-                Call(form,"OnStatus",new Status(Protocol.FromHex(Protocol.SampleHex)),true);var grid=(DataGridView)Field(form,"settings");var cal=(DataGridView)Field(form,"calibration");var right=(DataGridView)Field(form,"settingsRight");var bulk=right.Rows[0];
+                CheckChargingCards(form, new Status(Protocol.FromHex(Protocol.SampleHex)));
+                var grid=(DataGridView)Field(form,"settings");var cal=(DataGridView)Field(form,"calibration");var right=(DataGridView)Field(form,"settingsRight");var bulk=right.Rows[0];
                 Assert(grid.Rows.Count==10&&right.Rows.Count==10&&cal.Rows.Count==6,"All original controls must be visible");
                 Assert((string)bulk.Cells[1].Value=="56.4 V"&&(string)bulk.Cells[3].Value=="Unchanged","Current value and baseline");
                 Assert(bulk.Cells[1].ReadOnly&&!bulk.Cells[2].ReadOnly&&bulk.Cells[3].ReadOnly,"Only proposed value is editable");

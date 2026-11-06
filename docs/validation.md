@@ -1,4 +1,4 @@
-# Validation of version 1.0.3
+# Validation of version 1.0.4
 
 ## Offline checks
 
@@ -8,7 +8,9 @@ UI-model checks cover all 20 normal and six calibration controls, original two-c
 
 An independent offline call into the original PC executable's packet builder matched **78 packets across all 26 controls**: minimum, default and maximum encoded values. No serial-port object was created. See [all-controls-packet-audit.txt](../evidence/all-controls-packet-audit.txt). This verifies packet compatibility with the PC utility, not acceptance by inverter firmware.
 
-Native-window visual inspection was completed during development. The two-column layout fits all 20 normal rows at the default window size. The README screenshot shows the version 1.0.3 dashboard in a running test window using example readings and no serial connection. Its AC → Battery card displays battery-side charging current in A DC. Hidden bitmap captures are used separately for layout checks; their native combo-box and rich-text rendering can be incomplete, so they are not presented as screenshots of the finished running application.
+The charging-card UI check uses a 52.3 V battery, 120.6 V AC input and 63 V PV input. The dashboard shows 17 A DC and approximately 889 W from AC, and 0.7 A DC and approximately 37 W from solar. The test also changes battery voltage while holding both currents constant, then checks zero charging current from both sources.
+
+The README screenshot shows the version 1.0.4 dashboard with example readings. The two-column settings layout fits all 20 normal rows at the default window size.
 
 ## Communication hardware check
 

@@ -100,6 +100,7 @@ namespace InverterDesk
         public double OutputHz { get { return U16(18)/10.0; } }
         public double AcInput { get { return U16(12)/10.0; } }
         public double InputHz { get { return U16(14)/10.0; } }
+        public int AcChargeCurrent { get { return Data[23]; } }
         public double SolarCurrent { get { return Data[36]+(Data.Length>66?Data[66]/10.0:0); } }
         public double PvVoltage { get { return U16(34); } }
         public double Runtime { get { return U16(28)+Data[27]/10.0; } }
@@ -128,7 +129,7 @@ namespace InverterDesk
         {
             return new { schema="inverter-desk.status.v1", receivedUtc=ReceivedUtc.ToString("o"), machine=Model, firmware=Firmware, chargerFirmware=ChargerFirmware,
                 nominalBatteryVoltage=Units*12, batteryVoltage=Battery, outputVoltageReported=Output, outputFrequency=OutputHz, acInputVoltage=AcInput,
-                acInputFrequency=InputHz, batteryCapacityReportedPercent=(int)Data[22], acChargeCurrent=(int)Data[23], solarCurrent=SolarCurrent, pvVoltage=PvVoltage,
+                acInputFrequency=InputHz, batteryCapacityReportedPercent=(int)Data[22], acChargeCurrent=AcChargeCurrent, solarCurrent=SolarCurrent, pvVoltage=PvVoltage,
                 loadReportedPercent=Load, operatingMode=Mode, runtimeHours=Runtime,inverterTemperatureC=Data[25]==255?(int?)null:Data[25],chargerTemperatureC=Data[37]==0||Data[37]==255?(int?)null:Data[37], warningFlags=Protocol.Hex(Data.Skip(3).Take(3).ToArray()),
                 faultFlags=Protocol.Hex(Data.Skip(6).Take(3).ToArray()), settings=Catalog.All.Select(s=>new {address=s.Address,name=s.Name,raw=Value(s),display=s.Text(Value(s),Units)}).ToArray(), rawHex=Protocol.Hex(Frame)};
         }

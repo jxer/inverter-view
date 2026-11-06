@@ -38,13 +38,13 @@ namespace InverterDesk
                     g.DrawRectangle(pen,3,8,24,16);g.DrawRectangle(pen,27,13,3,6);
                     for(int i=0;i<3;i++)g.FillRectangle(fill,6+i*7,11,4,10);
                 }
-                else if(kind=="AC → Battery")
+                else if(kind==MainForm.AcToBatteryTitle)
                 {
                     g.DrawEllipse(pen,2,2,28,28);var wave=new PointF[25];
                     for(int i=0;i<wave.Length;i++)wave[i]=new PointF(6+i*20f/24,16-(float)Math.Sin(i*Math.PI*2/24)*6);
                     g.DrawLines(pen,wave);
                 }
-                else
+                else if(kind==MainForm.SolarToBatteryTitle)
                 {
                     g.DrawEllipse(pen,22,3,5,5);g.DrawLine(pen,24.5f,0.5f,24.5f,1);g.DrawLine(pen,29,5.5f,31,5.5f);g.DrawLine(pen,19,5.5f,20,5.5f);g.DrawLine(pen,28,9,29,10);
                     g.DrawPolygon(pen,new[]{new PointF(6,13),new PointF(25,13),new PointF(29,27),new PointF(2,27)});
@@ -117,6 +117,8 @@ namespace InverterDesk
     }
     public sealed class MainForm : Form
     {
+        internal const string AcToBatteryTitle = "AC → Battery";
+        internal const string SolarToBatteryTitle = "Solar → Battery";
         private static readonly Color Navy=Color.FromArgb(17,35,53), Ink=Color.FromArgb(25,45,65), Muted=Color.FromArgb(90,107,123), Teal=Color.FromArgb(0,126,126), Paper=Color.FromArgb(242,246,250);
         private readonly ComboBox ports=new ComboBox(),bauds=new ComboBox();
         private readonly ToggleSwitch temperatureUnits=new ToggleSwitch{UncheckedLabel="°C",CheckedLabel="°F"};
@@ -129,6 +131,7 @@ namespace InverterDesk
         private readonly Dictionary<string,Control> pages=new Dictionary<string,Control>();
         private readonly Dictionary<string,Button> nav=new Dictionary<string,Button>();
         private readonly Dictionary<string,Label> metrics=new Dictionary<string,Label>(),details=new Dictionary<string,Label>();
+        private readonly Dictionary<string,Label> chargingWatts = new Dictionary<string,Label>();
         private readonly Dictionary<int,string> outcomes=new Dictionary<int,string>();
         private readonly Dictionary<int,int> verifiedValues=new Dictionary<int,int>();
         private readonly HashSet<int> populated=new HashSet<int>();
@@ -203,20 +206,43 @@ namespace InverterDesk
         private static void Configure(Button b,string text,int width,int height=34){b.Text=text;b.Width=width;b.Height=height;b.FlatStyle=FlatStyle.Flat;b.FlatAppearance.BorderSize=0;b.BackColor=Color.FromArgb(225,234,242);b.ForeColor=Ink;b.Cursor=Cursors.Hand;b.Margin=new Padding(0,0,7,7);}
         private static Label Heading(string title,string subtitle){return new Label{Dock=DockStyle.Fill,Text=title+"\n"+subtitle,Font=new Font("Segoe UI",12),ForeColor=Ink,Padding=new Padding(0,4,0,8)};}
         private void ShowPage(string name){foreach(var p in pages)p.Value.Visible=p.Key==name;pages[name].BringToFront();foreach(var p in nav)p.Value.BackColor=p.Key==name?Teal:Navy;}
+        private Control BuildChargingFooter(string title)
+        {
+            var footerPanel = new Panel { Dock = DockStyle.Bottom, Height = 46, Margin = Padding.Empty };
+            var watts = new Label {
+                Text = "— W", Dock = DockStyle.Top, Height = 26,
+                Font = new Font("Segoe UI", 13, FontStyle.Bold), ForeColor = Teal,
+                TextAlign = ContentAlignment.MiddleLeft,
+                AccessibleDescription = "Calculated from battery voltage and this charger's DC current."
+            };
+            var caption = new Label {
+                Text = "Battery-side charging", Dock = DockStyle.Fill,
+                Font = new Font("Segoe UI", 10), ForeColor = Muted, TextAlign = ContentAlignment.MiddleLeft
+            };
+            footerPanel.Controls.Add(caption);
+            footerPanel.Controls.Add(watts);
+            chargingWatts.Add(title, watts);
+            return footerPanel;
+        }
+
         private Control BuildOverview()
         {
-            var page=new TableLayoutPanel{ColumnCount=1,RowCount=2,Margin=Padding.Empty};page.RowStyles.Add(new RowStyle(SizeType.Absolute,156));page.RowStyles.Add(new RowStyle(SizeType.Percent,100));
+            var page=new TableLayoutPanel{ColumnCount=1,RowCount=2,Margin=Padding.Empty};page.RowStyles.Add(new RowStyle(SizeType.Absolute,170));page.RowStyles.Add(new RowStyle(SizeType.Percent,100));
             var cards=new TableLayoutPanel{Dock=DockStyle.Fill,ColumnCount=4,RowCount=1,Margin=Padding.Empty};for(int i=0;i<4;i++)cards.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,25));
-            string[] keys={"Reported load","Battery voltage","AC → Battery","Solar charging"},units={"Device-reported percentage","","Battery-side charging current","Charging current"};
+            string[] keys = { "Reported load", "Battery voltage", AcToBatteryTitle, SolarToBatteryTitle };
             for(int i=0;i<4;i++)
             {
+                bool charging = keys[i] == AcToBatteryTitle || keys[i] == SolarToBatteryTitle;
                 var card=new Panel{Dock=DockStyle.Fill,BackColor=Color.White,Margin=new Padding(0,0,10,12),Padding=new Padding(15,12,12,10)};
                 var header=new TableLayoutPanel{Dock=DockStyle.Top,ColumnCount=2,RowCount=1,Height=42,Margin=Padding.Empty};header.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));header.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,44));
                 var title=new Label{Text=keys[i],Dock=DockStyle.Fill,ForeColor=Muted,Font=new Font("Segoe UI",12,FontStyle.Bold),Margin=Padding.Empty,TextAlign=ContentAlignment.MiddleLeft};
-                var value=new Label{Text="—",Dock=DockStyle.Top,Height=43,Font=new Font("Segoe UI",25,FontStyle.Bold),ForeColor=Teal};
+                var value=new Label{Text="—",Dock=DockStyle.Top,Height=46,Font=new Font("Segoe UI",charging?23:25,FontStyle.Bold),ForeColor=Teal};
                 header.Controls.Add(title,0,0);header.Controls.Add(new MetricIcon(keys[i]){Dock=DockStyle.Fill,Margin=Padding.Empty},1,0);
                 card.Controls.Add(value);card.Controls.Add(header);
-                if(units[i].Length>0)card.Controls.Add(new Label{Text=units[i],Dock=DockStyle.Bottom,Height=36,Font=new Font("Segoe UI",10),ForeColor=Muted,TextAlign=ContentAlignment.MiddleLeft});
+                if (charging)
+                    card.Controls.Add(BuildChargingFooter(keys[i]));
+                else if (keys[i] == "Reported load")
+                    card.Controls.Add(new Label{Text="Device-reported percentage",Dock=DockStyle.Bottom,Height=42,Font=new Font("Segoe UI",10),ForeColor=Muted,TextAlign=ContentAlignment.MiddleLeft});
                 metrics[keys[i]]=value;cards.Controls.Add(card,i,0);
             }
             page.Controls.Add(cards,0,0);
@@ -399,11 +425,23 @@ namespace InverterDesk
             connection.ForeColor=fresh?Theme.Good:connected&&latest==null?Theme.Warning:Theme.Bad;UpdateButtons();
         }
         private void UpdateButtons(){bool ready=connected&&!busy&&latest!=null&&(DateTime.UtcNow-latest.ReceivedUtc).TotalSeconds<4;foreach(Button b in writeButtons)b.Enabled=ready;export.Enabled=latest!=null;settings.ReadOnly=busy;settingsRight.ReadOnly=busy;calibration.ReadOnly=busy;otherProfile.Enabled=!busy;}
+        private void UpdateChargingCard(string title, double batteryVoltage, double chargingAmps)
+        {
+            metrics[title].Text = chargingAmps.ToString("0.#") + " A DC";
+            double watts = batteryVoltage * chargingAmps;
+            chargingWatts[title].Text = "≈ " + watts.ToString("0") + " W";
+        }
+
         private void OnStatus(Status s,bool received=true)
         {
             UpdateMachineStatus(s);
             details["MCU temperature"].Text="Not reported";details["Controller code"].Text="0x"+s.Data[26].ToString("X2");details["Charger code"].Text="0x"+s.Data[38].ToString("X2");
-            latest=s;if(sessionBaseline==null)sessionBaseline=s;metrics["Battery voltage"].Text=s.Battery.ToString("0.0")+" V";metrics["AC → Battery"].Text=s.Data[23]+" A DC";metrics["Reported load"].Text=s.Load+" %";metrics["Solar charging"].Text=s.SolarCurrent.ToString("0.0")+" A";
+            latest = s;
+            if (sessionBaseline == null) sessionBaseline = s;
+            metrics["Battery voltage"].Text = s.Battery.ToString("0.0") + " V";
+            metrics["Reported load"].Text = s.Load + " %";
+            UpdateChargingCard(AcToBatteryTitle, s.Battery, s.AcChargeCurrent);
+            UpdateChargingCard(SolarToBatteryTitle, s.Battery, s.SolarCurrent);
             details["Operating mode"].Text=s.Mode;details["AC input"].Text=s.AcInput.ToString("0.0")+" V";details["Input frequency"].Text=s.InputHz.ToString("0.0")+" Hz";details["Output frequency"].Text=s.OutputHz.ToString("0.0")+" Hz";details["PV voltage"].Text=s.PvVoltage.ToString("0")+" V";details["AC output"].Text=s.Output.ToString("0.0")+" V";details["Battery capacity"].Text=s.Data[22]+" % (reported)";details["Inverter temperature"].Text=s.Data[25]==255?"Unavailable":s.Data[25]+" °C";details["Charger temperature"].Text=s.Data[37]==0||s.Data[37]==255?"Unavailable":s.Data[37]+" °C";details["Runtime"].Text=((int)(s.Runtime/24))+" d "+(s.Runtime%24).ToString("0.0")+" h";details["Machine / bank"].Text=s.Model+" / "+s.Units*12+" V";details["Inverter firmware"].Text=s.Firmware;details["Charger firmware"].Text=s.ChargerFirmware;details["Warnings / faults"].Text=s.Alarm?"Reported — inspect diagnostics":"None reported";details["Warnings / faults"].ForeColor=s.Alarm?Theme.Bad:Theme.Accent;
             foreach(var grid in new[]{settings,settingsRight,calibration})foreach(DataGridViewRow row in grid.Rows){Setting d=(Setting)row.Tag;row.Cells[1].Value=d.Text(s.Value(d),s.Units);row.Cells[4].Value=d.Range(s.Units);if(!populated.Contains(d.Address)){if(d.Choices==null||s.Value(d)>=d.Min&&s.Value(d)<=d.Max)row.Cells[2].Value=d.Editable(s.Value(d),s.Units);populated.Add(d.Address);}row.Cells[5].Value=outcomes.ContainsKey(d.Address)?outcomes[d.Address]:d.Calibration?(d.Address==50?"No effect observed":"Not yet tested"):(d.Address==6?"Previously verified":"Not yet hardware-verified");UpdateChange(row,s);}
             diagnostic.Text="Machine "+s.Model+" | Inverter "+s.Firmware+" | Charger "+s.ChargerFirmware+"\r\nStatus: "+Protocol.Hex(s.Data.Take(3).ToArray())+"    Warning: "+Protocol.Hex(s.Data.Skip(3).Take(3).ToArray())+"    Fault: "+Protocol.Hex(s.Data.Skip(6).Take(3).ToArray())+"\r\nController code: "+s.Data[26]+" (0x"+s.Data[26].ToString("X2")+")  |  Charger code: "+s.Data[38]+" (0x"+s.Data[38].ToString("X2")+")\r\nUnmapped extension: "+Protocol.Hex(s.Data.Skip(67).ToArray())+"\r\n"+(logPath==null?"Opening session log...":"Log: "+logPath);

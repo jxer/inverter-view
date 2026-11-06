@@ -1,5 +1,10 @@
 # Changes
 
+## 1.0.4 — 2026-11-06
+
+- The **AC → Battery** and **Solar → Battery** dashboard cards now show DC charging amps and approximate watts for each source. Each calculation uses the reported battery voltage from the same status reply and rounds to the nearest watt.
+- Both cards use the same units, caption and layout, with distinct AC and solar panel icons. The settings help explains how to read both measurements.
+
 ## 1.0.3 — 2026-11-05
 
 - Renamed the AC charging dashboard card to AC → Battery and displayed its value in A DC, with the caption Battery-side charging current.

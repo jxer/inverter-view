@@ -82,7 +82,7 @@ Offset(s)  Meaning                                      Decoding
 31         Battery units                               number of 12 V units
 32,33      Charger firmware major, minor               1 and 1 -> 1.01
 34..35     PV voltage                                  uint16 V
-36         Solar charging current integer              A
+36         Solar charger output to battery, whole amps A DC
 37         Charger temperature                         C; 0 or 255 means N/A
 38         Charger code                                raw byte
 39..44     Calibration/protection values               retained in raw frame
@@ -111,7 +111,10 @@ output, not AC input amperage. The dashboard labels it AC -> Battery in
 A DC. Existing export keys acChargeCurrent and ac_charge_current_a are
 retained for compatibility and refer to this same DC measurement.
 
-Solar current = payload[36] + payload[66] / 10 when field 66 is present.
+The owner identified the solar-current field as DC current delivered to the
+battery on the tested inverter. Solar current = payload[36] + payload[66] / 10
+when field 66 is present. Each charging card multiplies its own current by the
+measured battery voltage (fields 20..21) from that same reply to display watts.
 Runtime hours = uint16(payload[28:30]) + payload[27] / 10.
 Techfine's machine display concatenates field 11 with field 31 * 12: 80 + 48
 becomes the displayed string 8048. This field does not independently prove a
