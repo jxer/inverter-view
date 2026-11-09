@@ -1,1 +1,1 @@
-11211fc78c24103615a839c00659146f5c86f8aaace1aefab42ec12cad6b1401  InverterView-1.0.5-portable.zip
+0e3dde7ff740e89c4144e1ba7190676b0988aaa0e9ddc1cd8b95800da6fe062b  InverterView-1.0.6-portable.zip

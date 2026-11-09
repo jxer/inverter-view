@@ -105,7 +105,7 @@ namespace InverterDesk
         public double PvVoltage { get { return U16(34); } }
         public double Runtime { get { return U16(28)+Data[27]/10.0; } }
         public int Load { get { return Data[24]; } }
-        public string Mode { get { return Data[30]==4?"Charging only":Data[30]==5?"Utility / AC":Data[30]==6?"Battery / DC":"Device state "+Data[30]; } }
+        public string Mode { get { return Data[30]==4?"Inverter off — Charging only":Data[30]==5?"Utility / AC":Data[30]==6?"Battery / DC":"Device state "+Data[30]; } }
         public bool Alarm { get { return Data.Skip(3).Take(6).Any(b=>b!=0)||(Data[2]&15)!=0; } }
         public bool WriteProfile { get { return Frame.Length==86&&Data[11]==80&&Units==4&&Firmware=="2.10"; } }
         public string MachineStatusText

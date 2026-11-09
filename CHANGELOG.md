@@ -1,5 +1,11 @@
 # Changes
 
+## 1.0.6 — 2026-11-09
+
+- Made operating state 4 explicit as **Inverter off — Charging only** in both the Operating mode row and Machine status.
+- Gave the Operating mode row enough height for the longer label to wrap at smaller window sizes.
+- Updated the help, command-line reader, documentation and dashboard screenshot to use the same wording.
+
 ## 1.0.5 — 2026-11-09
 
 - Named operating state 4 **Charging only** in both the dashboard's Operating mode row and Machine status, replacing the generic Device state 4 label.
