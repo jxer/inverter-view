@@ -6,6 +6,7 @@ namespace InverterDesk
     {
         public const string Introduction=
             "Choose a setting above to see what it does.\r\n\r\n"+
+            "OPERATING MODE\r\nCharging only means the inverter's AC output is off while battery charging from solar or AC remains available. The separate AC charging and Solar charging indicators show which sources are currently active.\r\n\r\n"+
             "CURRENT AND NEW VALUES\r\nCurrent is the value reported by the inverter. New value is your proposed edit. Amber marks an edit that has not been confirmed on the inverter. Teal marks a reported value that changed since connecting.\r\n\r\n"+
             "SAVE AND RESTORE SETTINGS\r\nSave settings writes the reported configuration to a JSON file. To restore it, connect to the same model, bank voltage and firmware, click Restore settings, choose the file and review the Current and Saved values. Click Restore selected settings to apply the checked rows. Matching values are skipped; experimental calibration must be selected separately. Each change is verified. If a change fails, the app tries to revert that step and stops; earlier successful changes remain applied. Older Inverter View snapshot files can also be loaded.\r\n\r\n"+
             "APPLYING A CHANGE\r\nSelect the setting, enter the new value and click Apply selected setting. The app reads the device again before sending and checks three readbacks afterward. Read the result message; a sent command alone does not confirm a change.\r\n\r\n"+

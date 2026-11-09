@@ -78,7 +78,7 @@ Offset(s)  Meaning                                      Decoding
 26         Controller code                             raw byte
 27         Runtime fraction                            tenths of an hour
 28..29     Runtime integer                             whole hours
-30         State-machine step                          5 AC Mode, 6 DC Mode
+30         State-machine step                          4 Charging only, 5 AC Mode, 6 DC Mode
 31         Battery units                               number of 12 V units
 32,33      Charger firmware major, minor               1 and 1 -> 1.01
 34..35     PV voltage                                  uint16 V
@@ -125,6 +125,13 @@ bits 0, 1 and 2 mean battery full, controller/AC charging and solar charging.
 Warning and fault bytes are all zero in this capture. State step 6 is DC Mode.
 The third status byte has controller-warning/fault and charger-warning/fault
 flags in its low four bits; all are clear here.
+
+State 4 is labeled "Charging only" based on an owner-confirmed observation on
+November 9, 2026: the inverter's AC output was off while solar charged the
+battery. AC charging is also available in this mode. The separate charging
+flags indicate the active source(s); state 4 alone does not establish nonzero
+charging current. This observation is for the tested machine 8048 / firmware
+2.10 and has not been independently confirmed for every compatible inverter.
 
 KNOWN INTERPRETATION LIMITS
 

@@ -1,5 +1,11 @@
 # Changes
 
+## 1.0.5 — 2026-11-09
+
+- Named operating state 4 **Charging only** in both the dashboard's Operating mode row and Machine status, replacing the generic Device state 4 label.
+- Explained that the inverter's AC output is off in this mode while solar or AC battery charging remains available. The separate charging indicators continue to show which sources are active.
+- Updated the command-line reader, protocol notes and dashboard screenshot to match.
+
 ## 1.0.4 — 2026-11-06
 
 - The **AC → Battery** and **Solar → Battery** dashboard cards now show DC charging amps and approximate watts for each source. Each calculation uses the reported battery voltage from the same status reply and rounds to the nearest watt.

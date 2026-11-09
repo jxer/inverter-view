@@ -1,4 +1,4 @@
-# Validation of version 1.0.4
+# Validation of version 1.0.5
 
 ## Offline checks
 
@@ -10,7 +10,9 @@ An independent offline call into the original PC executable's packet builder mat
 
 The charging-card UI check uses a 52.3 V battery, 120.6 V AC input and 63 V PV input. The dashboard shows 17 A DC and approximately 889 W from AC, and 0.7 A DC and approximately 37 W from solar. The test also changes battery voltage while holding both currents constant, then checks zero charging current from both sources.
 
-The README screenshot shows the version 1.0.4 dashboard with example readings. The two-column settings layout fits all 20 normal rows at the default window size.
+The README screenshot shows the version 1.0.5 dashboard with example readings, including operating state 4 labeled **Charging only** in both dashboard locations. The two-column settings layout fits all 20 normal rows at the default window size.
+
+The state 4 name reflects the owner's observation that the inverter output is off while solar or AC battery charging remains available. This release changes display wording; validation uses offline sample replies and opens no serial port.
 
 ## Communication hardware check
 

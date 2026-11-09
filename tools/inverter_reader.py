@@ -35,7 +35,7 @@ def decode_status(frame: bytes) -> dict:
         return int.from_bytes(p[offset:offset + 2], "little")
 
     state_step = p[30]
-    mode = {5: "AC Mode", 6: "DC Mode"}.get(state_step, "Bypass Mode (Techfine label)")
+    mode = {4: "Charging only", 5: "AC Mode", 6: "DC Mode"}.get(state_step, "Bypass Mode (Techfine label)")
     return {
         "header": "VPHB",
         "frame_bytes": len(frame),
