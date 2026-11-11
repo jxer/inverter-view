@@ -1,5 +1,11 @@
 # Changes
 
+## 1.0.7 — 2026-11-11
+
+- Added the current **Bulk** and **Float** charging voltage settings beneath the measured voltage on the Battery voltage dashboard card.
+- Both values use full-bank volts from the latest inverter status, matching the Current values in Device settings. Unapplied edits do not change these readouts.
+- Updated the help, documentation and dashboard screenshot.
+
 ## 1.0.6 — 2026-11-09
 
 - Made operating state 4 explicit as **Inverter off — Charging only** in both the Operating mode row and Machine status.

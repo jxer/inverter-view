@@ -2,7 +2,7 @@
 
 **Language: C# · Windows Forms · .NET Framework 4.8.** Complete application source, tests and PowerShell build/package scripts are included. The optional command-line capture reader is Python.
 
-Current version: **1.0.6**. See the dated [changelog](CHANGELOG.md) for changes between builds.
+Current version: **1.0.7**. See the dated [changelog](CHANGELOG.md) for changes between builds.
 
 A Windows desktop app for monitoring and configuring inverters that use the **CMSG / VPHB V-Series serial protocol**. Extract the portable ZIP to a writable folder and run `InverterView.exe`. No installer, Python runtime, account, or application password is needed.
 
@@ -14,7 +14,7 @@ A Windows desktop app for monitoring and configuring inverters that use the **CM
 
 ## Download and run
 
-Download [InverterView-1.0.6-portable.zip](dist/InverterView-1.0.6-portable.zip), extract it, and run `InverterView.exe`. The ZIP contains the executable, its runtime configuration, and documentation. Requires Windows with .NET Framework 4.8 and the USB-to-serial adapter's driver. The application runs with ordinary user privileges. Its executable is unsigned.
+Download [InverterView-1.0.7-portable.zip](dist/InverterView-1.0.7-portable.zip), extract it, and run `InverterView.exe`. The ZIP contains the executable, its runtime configuration, and documentation. Requires Windows with .NET Framework 4.8 and the USB-to-serial adapter's driver. The application runs with ordinary user privileges. Its executable is unsigned.
 
 1. Stop the original monitoring program's serial connection.
 2. Select the inverter's COM port. The tested connection uses **2400 baud, 8N1**, no flow control, DTR/RTS off.
@@ -23,6 +23,8 @@ Download [InverterView-1.0.6-portable.zip](dist/InverterView-1.0.6-portable.zip)
 5. Select **°C** or **°F** for temperatures. This preference is saved beside the executable; it does not change the inverter.
 
 All 20 normal settings are grouped in two columns, following the original utility's order. All six calibration controls have their own page. The **Dashboard** shows load, battery voltage and two charging cards. **AC → Battery** and **Solar → Battery** each show the DC amps supplied to the battery by that charger. The watts below each current are calculated from the battery voltage in the same reading and rounded to the nearest watt. For example, 52.3 V × 0.7 A displays as **≈ 37 W**. Machine status and the battery chart share the right-hand column equally. Hover over the chart for a voltage reading. The chart keeps the last 180 readings for the current connection.
+
+The **Battery voltage** card also shows the current **Bulk** and **Float** charging voltage settings beneath the measured voltage. These readouts use full-bank volts from the latest inverter status, matching Device settings' Current values. Pending edits are shown only in the settings editor.
 
 **Inverter off — Charging only** means the inverter's AC output is off while solar or AC battery charging remains available. Machine status shows which charging sources are active separately.
 

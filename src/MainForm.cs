@@ -132,6 +132,7 @@ namespace InverterDesk
         private readonly Dictionary<string,Button> nav=new Dictionary<string,Button>();
         private readonly Dictionary<string,Label> metrics=new Dictionary<string,Label>(),details=new Dictionary<string,Label>();
         private readonly Dictionary<string,Label> chargingWatts = new Dictionary<string,Label>();
+        private readonly Label bulkVoltage = new Label(), floatVoltage = new Label();
         private readonly Dictionary<int,string> outcomes=new Dictionary<int,string>();
         private readonly Dictionary<int,int> verifiedValues=new Dictionary<int,int>();
         private readonly HashSet<int> populated=new HashSet<int>();
@@ -225,6 +226,33 @@ namespace InverterDesk
             return footerPanel;
         }
 
+        private Control BuildBatterySettingsFooter()
+        {
+            var panel = new TableLayoutPanel {
+                Dock = DockStyle.Bottom, Height = 46, ColumnCount = 1, RowCount = 2,
+                Margin = Padding.Empty, Padding = Padding.Empty
+            };
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+            panel.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
+            panel.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
+            bulkVoltage.Text = "Bulk: — V";
+            floatVoltage.Text = "Float: — V";
+            bulkVoltage.AccessibleName = "Current bulk charging voltage setting";
+            floatVoltage.AccessibleName = "Current float charging voltage setting";
+            foreach (Label label in new[] { bulkVoltage, floatVoltage })
+            {
+                label.Dock = DockStyle.Fill;
+                label.Margin = Padding.Empty;
+                label.Font = new Font("Segoe UI", 10);
+                label.ForeColor = Muted;
+                label.TextAlign = ContentAlignment.MiddleLeft;
+                label.AccessibleDescription = "Latest setting reported by the inverter, in full-bank volts.";
+            }
+            panel.Controls.Add(bulkVoltage, 0, 0);
+            panel.Controls.Add(floatVoltage, 0, 1);
+            return panel;
+        }
+
         private Control BuildOverview()
         {
             var page=new TableLayoutPanel{ColumnCount=1,RowCount=2,Margin=Padding.Empty};page.RowStyles.Add(new RowStyle(SizeType.Absolute,170));page.RowStyles.Add(new RowStyle(SizeType.Percent,100));
@@ -241,6 +269,8 @@ namespace InverterDesk
                 card.Controls.Add(value);card.Controls.Add(header);
                 if (charging)
                     card.Controls.Add(BuildChargingFooter(keys[i]));
+                else if (keys[i] == "Battery voltage")
+                    card.Controls.Add(BuildBatterySettingsFooter());
                 else if (keys[i] == "Reported load")
                     card.Controls.Add(new Label{Text="Device-reported percentage",Dock=DockStyle.Bottom,Height=42,Font=new Font("Segoe UI",10),ForeColor=Muted,TextAlign=ContentAlignment.MiddleLeft});
                 metrics[keys[i]]=value;cards.Controls.Add(card,i,0);
@@ -439,6 +469,9 @@ namespace InverterDesk
             latest = s;
             if (sessionBaseline == null) sessionBaseline = s;
             metrics["Battery voltage"].Text = s.Battery.ToString("0.0") + " V";
+            Setting bulkSetting = Catalog.ByAddress(6), floatSetting = Catalog.ByAddress(7);
+            bulkVoltage.Text = "Bulk: " + (s.Units > 0 ? bulkSetting.Text(s.Value(bulkSetting), s.Units) : "— V");
+            floatVoltage.Text = "Float: " + (s.Units > 0 ? floatSetting.Text(s.Value(floatSetting), s.Units) : "— V");
             metrics["Reported load"].Text = s.Load + " %";
             UpdateChargingCard(AcToBatteryTitle, s.Battery, s.AcChargeCurrent);
             UpdateChargingCard(SolarToBatteryTitle, s.Battery, s.SolarCurrent);
