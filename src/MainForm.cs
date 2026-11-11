@@ -229,12 +229,12 @@ namespace InverterDesk
         private Control BuildBatterySettingsFooter()
         {
             var panel = new TableLayoutPanel {
-                Dock = DockStyle.Bottom, Height = 46, ColumnCount = 1, RowCount = 2,
+                Dock = DockStyle.Bottom, Height = 46, ColumnCount = 2, RowCount = 1,
                 Margin = Padding.Empty, Padding = Padding.Empty
             };
-            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            panel.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
-            panel.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+            panel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
             bulkVoltage.Text = "Bulk: — V";
             floatVoltage.Text = "Float: — V";
             bulkVoltage.AccessibleName = "Current bulk charging voltage setting";
@@ -249,7 +249,7 @@ namespace InverterDesk
                 label.AccessibleDescription = "Latest setting reported by the inverter, in full-bank volts.";
             }
             panel.Controls.Add(bulkVoltage, 0, 0);
-            panel.Controls.Add(floatVoltage, 0, 1);
+            panel.Controls.Add(floatVoltage, 1, 0);
             return panel;
         }
 

@@ -1,5 +1,10 @@
 # Changes
 
+## 1.0.8 — 2026-11-11
+
+- Placed the current **Bulk** and **Float** voltage settings side by side on one line beneath the measured battery voltage.
+- Updated the dashboard screenshot and documentation.
+
 ## 1.0.7 — 2026-11-11
 
 - Added the current **Bulk** and **Float** charging voltage settings beneath the measured voltage on the Battery voltage dashboard card.
